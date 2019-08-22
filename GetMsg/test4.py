@@ -182,11 +182,15 @@ def get_mail_content(msg):
             print("emailcontent:\r\n"+data)
             break
     return data
-
+def log_in(user,passwd):
+    mailusr=MailUser(user,passwd)
+    return mailusr
 
 
 if __name__ == "__main__":
-    mailusr=MailUser('haonan_0204@163.com','123456789asd')
+    user=input()
+    passwd=input()
+    mailusr=log_in(user,passwd)
     msglist=mailusr.getmail()
     mailusr.dealmail()
     #mailusr.mail_info()
