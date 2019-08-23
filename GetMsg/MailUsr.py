@@ -12,6 +12,9 @@ class Mail:
     def out(self):
         print(self.send+"..."+self.subject+"..."+self.text)
 
+    def get_text(self):
+        return self.text
+
 def decode_str(s):
     value, charset = decode_header(s)[0]
     if charset:
@@ -26,9 +29,6 @@ def guess_charset(msg):
         if pos >= 0:
             charset = content_type[pos + 8:].strip()
     return charset
-
-
-
 
 
 class MailUser:
@@ -166,6 +166,25 @@ class MailUser:
                 mail=self.parsemsg(msg)
                 self.maillist.append(mail)
             currentnumber = newnum
+
+
+
+    #得到邮件数量
+    def getmailnum(self):
+         return len(self.maillist)
+
+
+    #得到第几封邮件的内容
+    def  mailtext(self,num):
+        t=num-1
+        str=self.maillist[t].get_text()
+        return str
+
+
+
+
+
+
     def quit(self):
         self.server.quit()
 
@@ -185,12 +204,19 @@ def get_mail_content(msg):
 
 if __name__ == "__main__":
     mailusr=MailUser('haonan_0204@163.com','123456789asd')
-    str=mailusr.login('haonan_0204@163.com','123456789')
+    str=mailusr.login('haonan_0204@163.com','123456789asd')
     print(str)
 
     mailusr.getmails()
-    mailusr.mail_info()
-    # mailusr.checknew()
+    #mailusr.mail_info()
+    #mailusr.checknew()
+
+    num=mailusr.getmailnum()
+    text=mailusr.mailtext(5)
+    print(num)
+    print(text)
+
+
     mailusr.quit()
 
 
