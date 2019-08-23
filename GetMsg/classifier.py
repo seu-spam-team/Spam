@@ -8,8 +8,8 @@ import nltk #处理英文
 import sklearn #分类器用sklearn库
 from sklearn.naive_bayes import MultinomialNB #多项式模式  可以换成伯努利之类的
 import numpy as np
-# pylab as pl
-#import matplotlib.pyplot as plt #用于绘图的库
+import pylab as pl
+import matplotlib.pyplot as plt #用于绘图的库
 import pickle
 
 #粗暴的词统计
@@ -37,8 +37,19 @@ def text_processing(raw,flag='nltk'):
         raw = raw.replace("\\t"," ")
         raw = raw.replace("\\"," ")
         word_cut =  raw.split(' ')
-        word_list = [tok.lower() for tok in word_cut if len(tok) > 2]
-        test_data_list.append(word_list)
+        word_list1 = [tok.lower() for tok in word_cut if len(tok) > 2]
+        word_list2 = []
+        word_list = []
+
+        #stemmer = nltk.stem.porter.PorterStemmer()
+        #for word in word_list1:
+        #    word_list2.append(stemmer.stem(word))
+
+        #stemmer = nltk.stem.lancaster.LancasterStemmer()
+        #for word in word_list2:
+        #    word_list.append(stemmer.stem(word))
+
+        test_data_list.append(word_list1)
     
 
     return test_data_list
@@ -77,11 +88,17 @@ def text_features(test_data_list, feature_words, flag='nltk'):
 def text_classifier( test_feature_list, flag='nltk'):
     ## -----------------------------------------------------------------------------------
     if flag == 'nltk':
+        if len(set(test_feature_list[0].values())) == 1:
+            print(2)
+            return 1
         with open("3.pkl",'rb') as file:
             rq  = pickle.loads(file.read())
         predict_result = rq.prob_classify(test_feature_list[0]).prob('c000008')
     elif flag == 'sklearn':
         ## sklearn分类器
+        if len(set(test_feature_list[0])) == 1:
+            print(1)
+            return 1
         rq = MultinomialNB()
         with open("1.pkl",'rb') as file:
             rq  = pickle.loads(file.read())
@@ -94,13 +111,22 @@ def text_classifier( test_feature_list, flag='nltk'):
 print ('开始')
 
 ## 文本预处理
-folder_path = 'The hotels are the ones that rent out the tent. They are all lined up on the hotel grounds : )) So much for being one with nature, more like being one with a couple dozen tour groups and nature. I have about 100M of pictures from that trip. I can go through them and get you jpgs of my favorite scenic pictures.'
-test_data_list = text_processing(folder_path)
+s = ''
+Engl = re.compile(r'[\u0061-\u007a,\u0020]')
+Chin = re.compile(r'[\u4e00-\u9fa5]')
+en = "".join(Engl.findall(s.lower()))
+cn = "".join(Chin.findall(s.lower()))
+
+flag = 'sklearn'
+if 4*len(cn) >= len(en):    #当英文文本量超过中文六倍时，判断为英文
+    flag = 'sklearn'
+    test_data_list = text_processing(s,flag)
+else:
+    flag = 'nltk'
+    test_data_list = text_processing(s,flag)
 
 
-## 文本特征提取和分类
-# flag = 'nltk'
-flag = 'nltk'
+
 
 feature_words = words_dict(flag)
 test_feature_list = text_features( test_data_list, feature_words, flag)
