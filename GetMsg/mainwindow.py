@@ -58,6 +58,12 @@ class Ui_Form(object):
         self.logout.clicked.connect(self.logOut)
         self.setUserName("待定")
 
+    def __init__(self,mailUsr):
+        self.mailusr=mailUsr
+
+
+
+
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
@@ -70,11 +76,12 @@ class Ui_Form(object):
 
     def clickNormal(self):
         self.mailList.clear()
-        normallist = ["normal mail1", "normal mail2", "normal mail3"]
+        normallist = self.mailusr.getmailhead()
         self.mailList.addItems(normallist)
 
     def clickTrash(self):
         self.mailList.clear()
+
         trashlist = ["trash mail1", "trash mail2", "trash mail3"]
         self.mailList.addItems(trashlist    )
 

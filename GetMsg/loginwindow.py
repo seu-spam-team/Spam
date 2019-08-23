@@ -60,9 +60,12 @@ def usr_log_in():
             window.destroy()
             app = mainwindow.QtWidgets.QApplication(sys.argv)
             widget = mainwindow.QtWidgets.QWidget()
-            ui = mainwindow.Ui_Form()
+            mailusr.getmails()
+            #mailusr.mail_info()
+            ui = mainwindow.Ui_Form(mailusr)
             ui.setupUi(widget)
             widget.show()
+
             sys.exit(app.exec_())
             
 

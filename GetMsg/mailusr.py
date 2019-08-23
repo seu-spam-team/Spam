@@ -184,6 +184,16 @@ class MailUser:
         str=self.maillist[t].get_text()
         return str
 
+    def getmailhead(self):
+        list=[]
+        for mail in self.maillist:
+            send=mail.get_sender()
+            sub=mail.get_sub()
+            str='sender: '+send+'subject: '+sub
+            list.append(str)
+        return list
+
+
 
     def quit(self):
         self.server.quit()
