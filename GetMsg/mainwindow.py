@@ -76,14 +76,13 @@ class Ui_Form(object):
 
     def clickNormal(self):
         self.mailList.clear()
-        normallist = self.mailusr.getmailhead()
+        normallist = self.mailusr.get_normalmail()
         self.mailList.addItems(normallist)
 
     def clickTrash(self):
         self.mailList.clear()
-
-        trashlist = ["trash mail1", "trash mail2", "trash mail3"]
-        self.mailList.addItems(trashlist    )
+        trashlist =self.mailusr.get_badmail()
+        self.mailList.addItems(trashlist)
 
     def setUserName(self,str):
         self.username.setText(str)
@@ -98,6 +97,7 @@ class Ui_Form(object):
         ui.setupUi(widget)
         widget.show()
         sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     import sys

@@ -9,6 +9,7 @@ class Mail:
         self.send=sen
         self.subject=sub
         self.text=tex
+        self.ifnormal=None
     def out(self):
         print(self.send+"..."+self.subject+"..."+self.text)
 
@@ -18,6 +19,10 @@ class Mail:
         return self.send
     def get_sub(self):
         return self.subject
+    def get_label(self):
+        return self.ifnormal
+    def set_normal(self,label):
+        self.ifnormal=label
 
 def decode_str(s):
     value, charset = decode_header(s)[0]
@@ -179,9 +184,9 @@ class MailUser:
 
 
     #得到第几封邮件的内容
-    def  mailtext(self,num):
-        t=num-1
-        str=self.maillist[t].get_text()
+    def mailtext(self,num):
+        t=num
+        str=self.maillist[t].get_sub()+"    "+self.maillist[t].get_text()
         return str
 
     def getmailhead(self):
@@ -192,6 +197,36 @@ class MailUser:
             str='sender: '+send+'subject: '+sub
             list.append(str)
         return list
+
+
+    def get_badmail(self):
+        list = []
+        for mail in self.maillist:
+            if not mail.get_label():
+              send = mail.get_sender()
+              sub = mail.get_sub()
+              str = 'sender: ' + send + 'subject: ' + sub
+              list.append(str)
+        print(list)
+        return list
+
+
+
+    def get_normalmail(self):
+        list = []
+        for mail in self.maillist:
+            if mail.get_label():
+              send = mail.get_sender()
+              sub = mail.get_sub()
+              str = 'sender: ' + send + 'subject: ' + sub
+              list.append(str)
+        print(list)
+        return list
+
+
+    def setlabel(self,num,label):
+         self.maillist[num].set_normal(label)
+
 
 
 

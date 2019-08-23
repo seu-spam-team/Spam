@@ -10,6 +10,7 @@ import pickle
 from mailusr import MailUser
 import mainwindow
 import sys
+from classifier import classify
 #窗口
 
 window=tk.Tk()
@@ -33,7 +34,8 @@ entry_usr_name.place(x=160,y=150)
 var_usr_pwd=tk.StringVar()
 entry_usr_pwd=tk.Entry(window,textvariable=var_usr_pwd,show='*')
 entry_usr_pwd.place(x=160,y=190)
- 
+
+
 #登录函数
 def usr_log_in():
     #输入框获取用户名密码
@@ -56,12 +58,23 @@ def usr_log_in():
             tk.messagebox.showerror(message='密码错误')
 
     elif sta == 'login success':
+
             tk.messagebox.showinfo(title="欢迎",message="登录成功")
             window.destroy()
             app = mainwindow.QtWidgets.QApplication(sys.argv)
             widget = mainwindow.QtWidgets.QWidget()
             mailusr.getmails()
             #mailusr.mail_info()
+            num=mailusr.getmailnum()
+            for i in range(0,num):
+                test=mailusr.mailtext(i)
+                label=classify(test)
+                print('测试内容  ',test,  "结果  " ,label)
+                mailusr.setlabel(i,label)
+
+
+
+
             ui = mainwindow.Ui_Form(mailusr)
             ui.setupUi(widget)
             widget.show()
@@ -75,11 +88,6 @@ def usr_sign_quit():
     window.destroy()
 
 
-#whn_946@163.com
-#w3916h1999n0204    
-
-
-
 
 #登录 按钮
 bt_login=tk.Button(window,text='登录',command=usr_log_in)
@@ -88,5 +96,14 @@ bt_logquit=tk.Button(window,text='退出',command=usr_sign_quit)
 bt_logquit.place(x=280,y=230)
 #主循环
 window.mainloop()
+
+
+
+#whn_946@163.com
+#w3916h1999n0204    
+
+
+
+
 
 
