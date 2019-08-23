@@ -9,7 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QCoreApplication
-
+from mailusr import MailUser
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -76,9 +76,9 @@ class Ui_Form(object):
     def clickTrash(self):
         self.mailList.clear()
         trashlist = ["trash mail1", "trash mail2", "trash mail3"]
-        self.mailList.addItems(trashlist)
+        self.mailList.addItems(trashlist    )
 
-    def setUserName(self, str):
+    def setUserName(self,str):
         self.username.setText(str)
 
     def logOut(self):

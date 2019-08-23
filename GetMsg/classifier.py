@@ -8,8 +8,8 @@ import nltk #处理英文
 import sklearn #分类器用sklearn库
 from sklearn.naive_bayes import MultinomialNB #多项式模式  可以换成伯努利之类的
 import numpy as np
-import pylab as pl
-import matplotlib.pyplot as plt #用于绘图的库
+# pylab as pl
+#import matplotlib.pyplot as plt #用于绘图的库
 import pickle
 
 #粗暴的词统计
