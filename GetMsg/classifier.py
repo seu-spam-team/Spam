@@ -108,33 +108,31 @@ def text_classifier( test_feature_list, flag='nltk'):
         predict_result = 0
     return predict_result
 
-print ('开始')
 
-## 文本预处理
-s = ''
-Engl = re.compile(r'[\u0061-\u007a,\u0020]')
-Chin = re.compile(r'[\u4e00-\u9fa5]')
-en = "".join(Engl.findall(s.lower()))
-cn = "".join(Chin.findall(s.lower()))
+def classify(s,index=0.5)
+    ## 文本预处理
+    Engl = re.compile(r'[\u0061-\u007a,\u0020]')
+    Chin = re.compile(r'[\u4e00-\u9fa5]')
+    en = "".join(Engl.findall(s.lower()))
+    cn = "".join(Chin.findall(s.lower()))
 
-flag = 'sklearn'
-if 4*len(cn) >= len(en):    #当英文文本量超过中文六倍时，判断为英文
     flag = 'sklearn'
-    test_data_list = text_processing(s,flag)
-else:
-    flag = 'nltk'
-    test_data_list = text_processing(s,flag)
+    if 4*len(cn) >= len(en):    #当英文文本量超过中文六倍时，判断为英文
+        flag = 'sklearn'
+        test_data_list = text_processing(s,flag)
+    else:
+        flag = 'nltk'
+        test_data_list = text_processing(s,flag)
 
 
 
 
-feature_words = words_dict(flag)
-test_feature_list = text_features( test_data_list, feature_words, flag)
-predict_result = text_classifier(test_feature_list, flag)
+    feature_words = words_dict(flag)
+    test_feature_list = text_features( test_data_list, feature_words, flag)
+    predict_result = text_classifier(test_feature_list, flag)
 
-print(predict_result)
-if predict_result > 0.5:
-    print('垃圾邮件')
-else:
-    print('正常邮件')
+    if predict_result > index:
+        return False
+    else:
+        return True
 
