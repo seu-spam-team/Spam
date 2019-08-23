@@ -1,25 +1,6 @@
 +OK Welcome to coremail Mail Pop3 Server (163coms[10774b260cc7a37d26d71b52404dcf5cs])
-Messages: 13. Size: 92165
-[b'1 2325', b'2 5398', b'3 1312', b'4 7316', b'5 1321', b'6 1332', b'7 1343', b'8 1498', b'9 1420', b'10 1353', b'11 1316', b'12 1327', b'13 64904']
-from:zquad112@163.com,subject:attachment
-
-
-loooooooooooooooooooooooooooooooooooooooooooooooo
-
-['项目经理日报(模板).doc']
+Messages: 10. Size: 13608
+[b'1 1312', b'2 1321', b'3 1332', b'4 1343', b'5 1498', b'6 1420', b'7 1353', b'8 1316', b'9 1327', b'10 1386']
+from:zquad112@163.com,subject:你好你好
+[]
 from:zquad112@163.com,subject:jkl
-
-jkljkljkljlkjlkjklj
-
-[]
-from:zquad112@163.com,subject:fsad
-
-fsdafdsagsdga
-
-[]
-from:zquad112@163.com,subject:321312312342134
-
-5123532531257138297598123123
-
-[]
-from:zquad112@163.com,subject:7777777
