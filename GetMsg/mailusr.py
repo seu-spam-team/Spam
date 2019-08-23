@@ -205,9 +205,9 @@ class MailUser:
             if not mail.get_label():
               send = mail.get_sender()
               sub = mail.get_sub()
-              str = 'sender: ' + send + 'subject: ' + sub
+              text = mail.get_text()
+              str = 'sender: ' + send + 'subject: ' + sub + '\n' + 'text: '+text
               list.append(str)
-        print(list)
         return list
 
 
@@ -218,9 +218,9 @@ class MailUser:
             if mail.get_label():
               send = mail.get_sender()
               sub = mail.get_sub()
-              str = 'sender: ' + send + 'subject: ' + sub
+              text=mail.get_text()
+              str = 'sender: ' + send + 'subject: ' + sub+'\n'+ 'text:'+text
               list.append(str)
-        print(list)
         return list
 
 

@@ -102,9 +102,13 @@ class Ui_Form(object):
 if __name__ == "__main__":
     import sys
 
+    mailusr = MailUser('haonan_0204@163.com', '123456789asd')
+    str = mailusr.login('haonan_0204@163.com', '123456789asd')
+    mailusr.getmails()
+
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget()
-    ui = Ui_Form()
+    ui = Ui_Form(mailusr)
     ui.setupUi(widget)
     widget.show()
     sys.exit(app.exec_())
