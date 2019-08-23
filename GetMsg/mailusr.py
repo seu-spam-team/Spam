@@ -14,6 +14,10 @@ class Mail:
 
     def get_text(self):
         return self.text
+    def get_sender(self):
+        return self.send
+    def get_sub(self):
+        return self.subject
 
 def decode_str(s):
     value, charset = decode_header(s)[0]
@@ -181,24 +185,8 @@ class MailUser:
         return str
 
 
-
-
-
-
     def quit(self):
         self.server.quit()
-
-
-def get_mail_content(msg):
-    if msg == None:
-        return None
-    for part in msg.walk():
-        if not part.is_multipart():
-            data = part.get_payload(decode=True)
-            data=data.decode()
-            print("emailcontent:\r\n"+data)
-            break
-    return data
 
 
 
