@@ -9,7 +9,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QCoreApplication
-from mailusr import MailUser
+#from mailusr import MailUser
+from classifier import classify
+import tkinter as tk
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -99,13 +101,21 @@ class Ui_Form(object):
         sys.exit(app.exec_())
 
 
+    def shownew(self):
+        tk.messagebox.showinfo(title='提醒', message='收到一封新来信')
+
 if __name__ == "__main__":
     import sys
 
     mailusr = MailUser('haonan_0204@163.com', '123456789asd')
     str = mailusr.login('haonan_0204@163.com', '123456789asd')
     mailusr.getmails()
-
+    num = mailusr.getmailnum()
+    for i in range(0, num):
+        test = mailusr.mailtext(i)
+        label = classify(test)
+        print('测试内容  ', test, "结果  ", label)
+        mailusr.setlabel(i, label)
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget()
     ui = Ui_Form(mailusr)

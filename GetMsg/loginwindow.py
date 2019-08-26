@@ -52,7 +52,7 @@ def usr_log_in():
     #判断用户名和密码是否匹配
     mailusr=MailUser(usr_name,usr_pwd)
     sta = mailusr.login(usr_name,usr_pwd)
-    if  sta == "not connected":
+    if sta == "not connected":
             tk.messagebox.showerror(title='警告',message='网络未连接：')
     elif sta == 'login fail':
             tk.messagebox.showerror(message='密码错误')
@@ -72,15 +72,12 @@ def usr_log_in():
                 print('测试内容  ',test,  "结果  " ,label)
                 mailusr.setlabel(i,label)
 
-
-
-
             ui = mainwindow.Ui_Form(mailusr)
             ui.setupUi(widget)
             widget.show()
 
+            #mailusr.testnew(ui)
             sys.exit(app.exec_())
-            
 
 
     
