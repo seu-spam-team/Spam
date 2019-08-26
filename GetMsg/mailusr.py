@@ -5,13 +5,14 @@ from email.header import decode_header
 from email.utils import parseaddr
 
 class Mail:
-    def __init__(self,sen,sub,tex):
+    def __init__(self,sen,ip,sub,tex):
         self.send=sen
+        self.senderIP=ip
         self.subject=sub
         self.text=tex
         self.ifnormal=None
     def out(self):
-        print(self.send+"..."+self.subject+"..."+self.text)
+        print(self.send+"..."+self.senderIP+'....'+self.subject+"..."+self.text)
 
     def get_text(self):
         return self.text
@@ -45,7 +46,7 @@ class MailUser:
 
         if '@163.com' in usr:
            self.pop3_server = 'pop.163.com'
-        elif '@qq.com' in pwd:
+        elif '@qq.com' in usr:
             self.pop3_server = 'pop.qq.com'
         # 连接到POP3服务器:
         self.server = None
@@ -124,7 +125,7 @@ class MailUser:
 
     def parsemsg(self, msg):
             # if indent == 0:
-            for header in ['From', 'To', 'Subject']:
+            for header in ['From', 'X-Originating-IP', 'Subject']:
                 value = msg.get(header, '')
                 if value:
                     if header == 'Subject':
@@ -135,7 +136,9 @@ class MailUser:
                         name = decode_str(hdr)
                         value = u'%s <%s>' % (name, addr)
                         sender = value
-
+                    elif header=='X-Originating-IP':
+                        value = decode_str(value)
+                        ip = value
             if msg is None:
                 return None
             for part in msg.walk():
@@ -143,7 +146,7 @@ class MailUser:
                     text = self.get_content(part)
                     print("emailcontent:\r\n" + text)
                     break;
-            mail = Mail(sender, sub, text)
+            mail = Mail(sender, ip,sub, text)
             mail.out()
             return mail
 
