@@ -4,12 +4,12 @@ import os
 import time
 import random
 import jieba #处理中文，要加库
-import nltk #处理英文
+#import nltk #处理英文
 import sklearn #分类器用sklearn库
 from sklearn.naive_bayes import MultinomialNB #多项式模式  可以换成伯努利之类的
 import numpy as np
-#import pylab as pl
-#import matplotlib.pyplot as plt #用于绘图的库
+import pylab as pl
+import matplotlib.pyplot as plt #用于绘图的库
 import pickle
 
 #粗暴的词统计
@@ -89,16 +89,13 @@ def text_classifier( test_feature_list, flag='nltk'):
     ## -----------------------------------------------------------------------------------
     if flag == 'nltk':
         if len(set(test_feature_list[0].values())) == 1:
-            #print(2)
+            print(3)
             return 1
         with open("3.pkl",'rb') as file:
             rq  = pickle.loads(file.read())
         predict_result = rq.prob_classify(test_feature_list[0]).prob('c000008')
     elif flag == 'sklearn':
         ## sklearn分类器
-        if len(set(test_feature_list[0])) == 1:
-            #print(1)
-            return 1
         rq = MultinomialNB()
         with open("1.pkl",'rb') as file:
             rq  = pickle.loads(file.read())
@@ -109,7 +106,7 @@ def text_classifier( test_feature_list, flag='nltk'):
     return predict_result
 
 
-def classify(s,index=0.5):
+def classify(s,index=0.55):
     ## 文本预处理
     Engl = re.compile(r'[\u0061-\u007a,\u0020]')
     Chin = re.compile(r'[\u4e00-\u9fa5]')
@@ -124,13 +121,20 @@ def classify(s,index=0.5):
         flag = 'nltk'
         test_data_list = text_processing(s,flag)
 
+
+
+
     feature_words = words_dict(flag)
     test_feature_list = text_features( test_data_list, feature_words, flag)
     predict_result = text_classifier(test_feature_list, flag)
 
+    print(predict_result)
     if predict_result > index:
         return False
     else:
         return True
 
-print(classify('今晚去吃饭吗'))
+if classify('生日快乐!'):
+    print(1)
+else:
+    print(2)
