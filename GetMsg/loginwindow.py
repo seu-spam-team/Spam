@@ -13,6 +13,7 @@ import sys
 from classifier import classify
 from signal import *
 from newthread import MyThread
+from function import UI_MainWindow
 #窗口
 
 window=tk.Tk()
@@ -79,9 +80,12 @@ def usr_log_in():
             signal.sendMsg.connect(slot.get)
 
 
-            ui = mainwindow.Ui_Form(mailusr)
-            ui.setupUi(widget)
-            widget.show()
+            ui=UI_MainWindow(mailusr)
+
+            #ui = mainwindow.Ui_Form(mailusr)
+            #ui.setupUi(widget)
+            ui.setUserName(usr_name)
+            ui.show()
             newthread=MyThread(mailusr,signal)
             newthread.start()
             sys.exit(app.exec_())
@@ -90,8 +94,6 @@ def usr_log_in():
     
 def usr_sign_quit():
     window.destroy()
-
-
 
 #登录 按钮
 bt_login=tk.Button(window,text='登录',command=usr_log_in)
@@ -103,8 +105,7 @@ window.mainloop()
 
 
 
-#whn_946@163.com
-#w3916h1999n0204    
+
 
 
 

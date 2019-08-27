@@ -6,127 +6,70 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5.QtCore import QObject,pyqtSignal
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QCoreApplication
-from mailusr import MailUser
-from classifier import classify
-from PyQt5.QtWidgets import  QMessageBox
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(1091, 712)
-        self.columnView = QtWidgets.QColumnView(Form)
-        self.columnView.setGeometry(QtCore.QRect(0, 110, 201, 601))
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(711, 600)
+        self.columnView = QtWidgets.QColumnView(MainWindow)
+        self.columnView.setGeometry(QtCore.QRect(0, 110, 181, 491))
         self.columnView.setObjectName("columnView")
-        self.normal = QtWidgets.QPushButton(Form)
-        self.normal.setGeometry(QtCore.QRect(30, 150, 141, 31))
+        self.normal = QtWidgets.QPushButton(MainWindow)
+        self.normal.setGeometry(QtCore.QRect(30, 150, 111, 31))
         self.normal.setObjectName("normal")
-        self.trash = QtWidgets.QPushButton(Form)
-        self.trash.setGeometry(QtCore.QRect(30, 200, 141, 31))
+        self.trash = QtWidgets.QPushButton(MainWindow)
+        self.trash.setGeometry(QtCore.QRect(30, 200, 111, 31))
         self.trash.setObjectName("trash")
-        self.listView = QtWidgets.QListView(Form)
-        self.listView.setGeometry(QtCore.QRect(0, 0, 1091, 111))
+        self.listView = QtWidgets.QListView(MainWindow)
+        self.listView.setGeometry(QtCore.QRect(0, 0, 711, 111))
         self.listView.setObjectName("listView")
-        self.listView_2 = QtWidgets.QListView(Form)
-        self.listView_2.setGeometry(QtCore.QRect(200, 110, 891, 601))
+        self.listView_2 = QtWidgets.QListView(MainWindow)
+        self.listView_2.setGeometry(QtCore.QRect(180, 110, 531, 491))
         self.listView_2.setObjectName("listView_2")
-        self.mailList = QtWidgets.QListWidget(Form)
-        self.mailList.setGeometry(QtCore.QRect(200, 110, 891, 551))
+        self.mailList = QtWidgets.QListWidget(MainWindow)
+        self.mailList.setGeometry(QtCore.QRect(180, 110, 531, 411))
         self.mailList.setObjectName("mailList")
-        self.logout = QtWidgets.QPushButton(Form)
-        self.logout.setGeometry(QtCore.QRect(980, 40, 71, 31))
+        self.logout = QtWidgets.QPushButton(MainWindow)
+        self.logout.setGeometry(QtCore.QRect(600, 40, 71, 31))
         self.logout.setObjectName("logout")
-        self.portrait = QtWidgets.QLabel(Form)
-        self.portrait.setGeometry(QtCore.QRect(50, 20, 91, 81))
-        self.portrait.setObjectName("portrait")
-        self.username = QtWidgets.QLabel(Form)
-        self.username.setGeometry(QtCore.QRect(130, 50, 271, 21))
+        self.username = QtWidgets.QLabel(MainWindow)
+        self.username.setGeometry(QtCore.QRect(30, 40, 271, 21))
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
         font.setPointSize(12)
         self.username.setFont(font)
         self.username.setObjectName("username")
-        self.checkmail = QtWidgets.QPushButton(Form)
-        self.checkmail.setGeometry(QtCore.QRect(780, 670, 81, 31))
+        self.checkmail = QtWidgets.QPushButton(MainWindow)
+        self.checkmail.setGeometry(QtCore.QRect(430, 540, 81, 31))
         self.checkmail.setObjectName("checkmail")
+        self.blacklist = QtWidgets.QLineEdit(MainWindow)
+        self.blacklist.setGeometry(QtCore.QRect(10, 320, 113, 20))
+        self.blacklist.setObjectName("blacklist")
+        self.whitelist = QtWidgets.QLineEdit(MainWindow)
+        self.whitelist.setGeometry(QtCore.QRect(10, 350, 113, 20))
+        self.whitelist.setObjectName("whitelist")
+        self.blackconfirm = QtWidgets.QPushButton(MainWindow)
+        self.blackconfirm.setGeometry(QtCore.QRect(130, 320, 41, 21))
+        self.blackconfirm.setObjectName("blackconfirm")
+        self.whiteconfirm = QtWidgets.QPushButton(MainWindow)
+        self.whiteconfirm.setGeometry(QtCore.QRect(130, 350, 41, 21))
+        self.whiteconfirm.setObjectName("whiteconfirm")
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.normal.clicked.connect(self.clickNormal)
-        self.trash.clicked.connect(self.clickTrash)
-        self.logout.clicked.connect(self.logOut)
-        self.setUserName("待定")
-
-    def __init__(self,mailUsr):
-        self.mailusr=mailUsr
-
-
-
-
-    def retranslateUi(self, Form):
+    def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.normal.setText(_translate("Form", "收件箱"))
-        self.trash.setText(_translate("Form", "垃圾箱"))
-        self.logout.setText(_translate("Form", "退出"))
-        self.portrait.setText(_translate("Form", "头像"))
-        self.username.setText(_translate("Form", "用户名"))
-        self.checkmail.setText(_translate("Form", "查看"))
-
-    def clickNormal(self):
-        self.mailList.clear()
-        normallist = self.mailusr.get_normalmail()
-        self.mailList.addItems(normallist)
-
-    def clickTrash(self):
-        self.mailList.clear()
-        trashlist =self.mailusr.get_badmail()
-        self.mailList.addItems(trashlist)
-
-    def setUserName(self,str):
-        self.username.setText(str)
-
-    def logOut(self):
-        QCoreApplication.instance().quit()
-
-    def showWidget(self):
-        app = QtWidgets.QApplication(sys.argv)
-        widget = QtWidgets.QWidget()
-        ui = Ui_Form()
-        ui.setupUi(widget)
-        widget.show()
-        sys.exit(app.exec_())
-
-
-    def shownew(self):
-        QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信")
-
-
-
-if __name__ == "__main__":
-    import sys
-    mailusr = MailUser('haonan_0204@163.com', '123456789asd')
-    str = mailusr.login('haonan_0204@163.com', '123456789asd')
-    mailusr.getmails()
-    num = mailusr.getmailnum()
-    for i in range(0, num):
-        test = mailusr.mailtext(i)
-        label = classify(test)
-        print('测试内容  ', test, "结果  ", label)
-        mailusr.setlabel(i, label)
-    app = QtWidgets.QApplication(sys.argv)
-    widget = QtWidgets.QWidget()
-    ui = Ui_Form(mailusr)
-    ui.setupUi(widget)
-    widget.show()
-    #ui.shownew(widget)
-
-
-
-    sys.exit(app.exec_())
-
-
-
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.normal.setText(_translate("MainWindow", "收件箱"))
+        self.trash.setText(_translate("MainWindow", "垃圾箱"))
+        self.logout.setText(_translate("MainWindow", "退出"))
+        self.username.setText(_translate("MainWindow", "用户名"))
+        self.checkmail.setText(_translate("MainWindow", "查看"))
+        self.blacklist.setPlaceholderText(_translate("MainWindow", "添加黑名单"))
+        self.whitelist.setPlaceholderText(_translate("MainWindow", "添加白名单"))
+        self.blackconfirm.setText(_translate("MainWindow", "确认"))
+        self.whiteconfirm.setText(_translate("MainWindow", "确认"))
