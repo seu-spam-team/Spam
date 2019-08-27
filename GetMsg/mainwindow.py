@@ -6,12 +6,12 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
+from PyQt5.QtCore import QObject,pyqtSignal
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QCoreApplication
-#from mailusr import MailUser
+from mailusr import MailUser
 from classifier import classify
-import tkinter as tk
+from PyQt5.QtWidgets import  QMessageBox
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -102,11 +102,12 @@ class Ui_Form(object):
 
 
     def shownew(self):
-        tk.messagebox.showinfo(title='提醒', message='收到一封新来信')
+        QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信")
+
+
 
 if __name__ == "__main__":
     import sys
-
     mailusr = MailUser('haonan_0204@163.com', '123456789asd')
     str = mailusr.login('haonan_0204@163.com', '123456789asd')
     mailusr.getmails()
@@ -121,4 +122,11 @@ if __name__ == "__main__":
     ui = Ui_Form(mailusr)
     ui.setupUi(widget)
     widget.show()
+    #ui.shownew(widget)
+
+
+
     sys.exit(app.exec_())
+
+
+

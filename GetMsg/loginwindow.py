@@ -11,6 +11,8 @@ from mailusr import MailUser
 import mainwindow
 import sys
 from classifier import classify
+from signal import *
+from newthread import MyThread
 #窗口
 
 window=tk.Tk()
@@ -72,11 +74,16 @@ def usr_log_in():
                 print('测试内容  ',test,  "结果  " ,label)
                 mailusr.setlabel(i,label)
 
+            signal = SiganlObj()
+            slot = TypeSlot()
+            signal.sendMsg.connect(slot.get)
+
+
             ui = mainwindow.Ui_Form(mailusr)
             ui.setupUi(widget)
             widget.show()
-
-            #mailusr.testnew(ui)
+            newthread=MyThread(mailusr,signal)
+            newthread.start()
             sys.exit(app.exec_())
 
 

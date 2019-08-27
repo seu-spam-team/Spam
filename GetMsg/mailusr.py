@@ -3,7 +3,7 @@ import time
 from email.parser import Parser
 from email.header import decode_header
 from email.utils import parseaddr
-from mainwindow import Ui_Form
+
 class Mail:
     def __init__(self,sen,ip,sub,tex):
         self.send=sen
@@ -152,7 +152,7 @@ class MailUser:
 
 
 
-    def checknew(self):
+    def checknew(self,signal):
         resp, mails, octets = self.server.list()
         currentnumber = len(mails)
         while True:
@@ -177,44 +177,8 @@ class MailUser:
                 # server.dele(index)
                 mail=self.parsemsg(msg)
                 self.maillist.append(mail)
+                signal.run()
             currentnumber = newnum
-
-
-    def testnew(self,mainwin_ui):
-            resp, mails, octets = self.server.list()
-            currentnumber = len(mails)
-
-            time.sleep(10)
-            self.server.quit()
-            self.server = poplib.POP3(self.pop3_server)
-            self.server.set_debuglevel(1)
-            self.server.user(self.user)
-            self.server.pass_(self.password)
-            self.server.stat()
-            resp, mails, octets = self.server.list()
-            newnum = len(mails)
-            if (currentnumber != newnum):
-                index = newnum
-                resp, lines, octets = self.server.retr(index)
-                # lines存储了邮件的原始文本的每一行,
-                # 可以获得整个邮件的原始文本:
-                msg_content = b'\r\n'.join(lines).decode('utf-8')
-                # 稍后解析出邮件:
-                msg = Parser().parsestr(msg_content)
-                # 可以根据邮件索引号直接从服务器删除邮件:
-                # server.dele(index)
-                mail=self.parsemsg(msg)
-                self.maillist.append(mail)
-                mainwin_ui.shownew()
-            currentnumber = newnum
-
-
-
-
-
-
-
-
 
     #得到邮件数量
     def getmailnum(self):
