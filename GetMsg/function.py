@@ -24,12 +24,12 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.mailList.addItems(trashlist)
 
     def clickBlackConfirm(self):
-        str=self.getBlackList()
+        str=self.username.text()+' '+self.getBlackList()
         self.clisock.sendBlack(str)
         self.blacklist.clear()
 
     def clickWhiteConfirm(self):
-        str=self.getWhiteList()
+        str=self.username.text()+' '+self.getWhiteList()
         self.clisock.sendWhite(str)
         self.whitelist.clear()
 

@@ -13,8 +13,8 @@ class ServerDaemon:
 
 	def __init__(self):
 		print('Server started.')
-		HOST = '10.203.218.188'
-		PORT = 9500
+		HOST = '10.203.192.179'
+		PORT = 8080
 		ADDR = (HOST,PORT)
 
 		sockfd = socket(AF_INET,SOCK_STREAM)

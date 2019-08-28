@@ -30,6 +30,8 @@ class Mail:
         self.ifnormal=label
     def set_pretest(self,pre):
         self.pre_test=pre
+    def get_test(self):
+        return self.subject+' '+self.text
 
 def decode_str(s):
     value, charset = decode_header(s)[0]
@@ -178,7 +180,7 @@ class MailUser:
 
 
 
-    def checknew(self,signal):
+    def checknew(self,signal,sock):
         resp, mails, octets = self.server.list()
         currentnumber = len(mails)
         while True:
@@ -191,7 +193,7 @@ class MailUser:
             self.server.stat()
             resp, mails, octets = self.server.list()
             newnum = len(mails)
-            if (currentnumber != newnum):
+            if (currentnumber < newnum):
                 index = newnum
                 resp, lines, octets = self.server.retr(index)
                 # lines存储了邮件的原始文本的每一行,
@@ -202,8 +204,15 @@ class MailUser:
                 # 可以根据邮件索引号直接从服务器删除邮件:
                 # server.dele(index)
                 mail=self.parsemsg(msg)
+                test=mail.get_test()
+                sock.sendmail(test)
+                label = sock.getresult()
+                mail.set_normal(label)
                 self.maillist.append(mail)
-                signal.run()
+                if label==True:
+                  signal.run('正常')
+                else:
+                  signal.run('垃圾')
             currentnumber = newnum
 
     #得到邮件数量
@@ -277,9 +286,7 @@ if __name__ == "__main__":
     print(num)
     print(text)
 
-
     mailusr.quit()
-
 
 
 

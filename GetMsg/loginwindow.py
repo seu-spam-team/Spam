@@ -76,7 +76,7 @@ def usr_log_in():
                 clisock.sendmail(test)
                 #label=classify(test)
                 label=clisock.getresult()
-                #print('测试内容  ',test,  "结果  " ,label)
+                print('测试内容  ',test,  "结果  " ,label)
                 mailusr.setlabel(i,label)
 
             signal = SiganlObj()
@@ -88,7 +88,7 @@ def usr_log_in():
 
             ui.setUserName(usr_name)
             ui.show()
-            newthread=MyThread(mailusr,signal)
+            newthread=MyThread(mailusr,signal,clisock)
             newthread.start()
             sys.exit(app.exec_())
 

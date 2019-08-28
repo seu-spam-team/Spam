@@ -10,15 +10,18 @@ class SiganlObj(QObject):
 
      def __init__(self):
          super(SiganlObj, self).__init__()
-     def run(self):
-         self.sendMsg.emit('')#发射信号
+     def run(self,msg):
+         self.sendMsg.emit(msg)#发射信号
 
 class TypeSlot(QObject):#定义槽对象
      def __init__(self):
          super(TypeSlot, self).__init__()
      def get(self,msg):#定义槽函数
          print(">>",msg)
-         QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信")
+         if msg=='正常':
+           QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信")
+         elif msg=='垃圾':
+           QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信,疑似为垃圾邮件")
 
 if __name__=='__main__':
     send=SiganlObj()

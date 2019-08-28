@@ -2,8 +2,8 @@ import socket
 import time
 import sys
 
-HOST = '10.203.218.188'
-PORT = 9500
+HOST = '10.203.192.179'
+PORT = 8080
 BUFIZ = 1024
 ADDR = (HOST, PORT)
 
@@ -65,9 +65,9 @@ class Client:
 if __name__ == "__main__":
         cli = Client()
         cli.sendUsr('usr')
-        for i in range(0,3):
-          cli.sendmail('Please call our customer service representative on FREEPHONE 0808 145 4742 between 9am-11pm as you have WON a guaranteed ?1000 cash or ?5000 prize!')
-          cli.getresult()
+        # for i in range(0,3):
+        #   cli.sendmail('Please call our customer service representative on FREEPHONE 0808 145 4742 between 9am-11pm as you have WON a guaranteed ?1000 cash or ?5000 prize!')
+        #   cli.getresult()
         cli.sendBlack('black')
         cli.sendWhite('white')
         cli.close()
