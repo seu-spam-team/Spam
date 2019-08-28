@@ -13,7 +13,7 @@ class ServerDaemon:
 
 	def __init__(self):
 		print('Server started.')
-		HOST = '10.203.199.2'
+		HOST = '10.203.218.188'
 		PORT = 9500
 		ADDR = (HOST,PORT)
 
@@ -38,27 +38,34 @@ class ServerThread(threading.Thread):
 		try:
 			while True:
 				msg = str(self.cliSockfd.recv(4096),encoding='utf-8')
-				if msg == '':
-					continue
+				if len(msg) <= 0:
+					self.cliSockfd.close()
 				elif msg[0] == 'a':#账户，创建检索table          a
 					msg = msg[1:]
 					print(msg)
 					pass
-				elif msg[0] == 'b':#正文分类                     b
+				elif msg[0] == 'b':#正文分类     
 					msg = msg[1:]
-					print(msg)
-					self.cliSockfd.send(bytes('qwertyuiodsfgfhjk',encoding='utf-8'))
+					if classifier.classify(msg):
+						self.cliSockfd.send(bytes('1',encoding='utf-8'))
+					else:
+						self.cliSockfd.send(bytes('0',encoding='utf-8'))
 					pass
 				elif msg[0] == 'c':#黑名单                     b
 					msg = msg[1:]
+					user = msg.split(' ')[0]
 					print(msg)
 					pass
 				elif msg[0] == 'd':#白名单                     b
 					msg = msg[1:]
+					user = msg.split(' ')[0]
 					print(msg)
 					pass
+				else:
+					print('无意义')
 		except:
-			print('error')
+			#print('error')
+			pass
 		finally:
 			self.cliSockfd.close()
 			ServerDaemon.CURRENT_THREADS = ServerDaemon.CURRENT_THREADS - 1
