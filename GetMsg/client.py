@@ -18,8 +18,6 @@ class Client:
         time.sleep(0.2)
         self.cliSock.close()
 
-
-
     def sendmail(self, text):
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.cliSock.connect(ADDR)

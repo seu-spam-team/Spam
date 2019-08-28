@@ -106,7 +106,7 @@ bt_logquit.place(x=280,y=230)
 window.mainloop()
 
 
-
+#imunylwkvtkhgjgc
 
 
 
