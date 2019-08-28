@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Aug 21 16:26:09 2019
-
 @author: adminster
 """
 import tkinter as tk
@@ -9,7 +8,7 @@ import tkinter.messagebox
 import pickle
 from mailusr import MailUser
 import mainwindow
-import sys
+from client import Client
 from classifier import classify
 from signal import *
 from newthread import MyThread
@@ -64,15 +63,20 @@ def usr_log_in():
 
             tk.messagebox.showinfo(title="欢迎",message="登录成功")
             window.destroy()
+
             app = mainwindow.QtWidgets.QApplication(sys.argv)
-            widget = mainwindow.QtWidgets.QWidget()
+
+            clisock=Client()
+            clisock.sendUsr(usr_name)
+
             mailusr.getmails()
-            #mailusr.mail_info()
             num=mailusr.getmailnum()
             for i in range(0,num):
                 test=mailusr.mailtext(i)
-                label=classify(test)
-                print('测试内容  ',test,  "结果  " ,label)
+                clisock.sendmail(test)
+                #label=classify(test)
+                label=clisock.getresult()
+                #print('测试内容  ',test,  "结果  " ,label)
                 mailusr.setlabel(i,label)
 
             signal = SiganlObj()
@@ -80,10 +84,8 @@ def usr_log_in():
             signal.sendMsg.connect(slot.get)
 
 
-            ui=UI_MainWindow(mailusr)
+            ui=UI_MainWindow(mailusr,clisock)
 
-            #ui = mainwindow.Ui_Form(mailusr)
-            #ui.setupUi(widget)
             ui.setUserName(usr_name)
             ui.show()
             newthread=MyThread(mailusr,signal)

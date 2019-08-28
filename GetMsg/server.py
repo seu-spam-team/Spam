@@ -13,7 +13,7 @@ class ServerDaemon:
 
 	def __init__(self):
 		print('Server started.')
-		HOST = '10.203.218.188'
+		HOST = '10.203.199.2'
 		PORT = 9500
 		ADDR = (HOST,PORT)
 

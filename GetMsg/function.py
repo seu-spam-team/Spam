@@ -7,12 +7,12 @@ import checkmail
 
 
 class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
-    def __init__(self,mailusr):
+    def __init__(self,mailusr,clisock):
         super(UI_MainWindow, self).__init__()
         self.setupUi(self)
         self.connectButtons()
         self.mailusr=mailusr
-
+        self.clisock=clisock
     def clickNormal(self):
         self.mailList.clear()
         normallist = self.mailusr.get_normalmail()
@@ -24,11 +24,13 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.mailList.addItems(trashlist)
 
     def clickBlackConfirm(self):
-        print(self.getBlackList())
+        str=self.getBlackList()
+        self.clisock.sendBlack(str)
         self.blacklist.clear()
 
     def clickWhiteConfirm(self):
-        print(self.getWhiteList())
+        str=self.getWhiteList()
+        self.clisock.sendWhite(str)
         self.whitelist.clear()
 
     def setUserName(self, str):

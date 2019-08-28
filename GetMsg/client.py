@@ -2,8 +2,8 @@ import socket
 import time
 import sys
 
-HOST = '10.0.0.6'
-PORT = 8080
+HOST = '10.203.218.188'
+PORT = 9500
 BUFIZ = 1024
 ADDR = (HOST, PORT)
 
@@ -16,38 +16,58 @@ class Client:
         t = 'a' + usr
         self.cliSock.send(bytes(t, encoding='utf-8'))
         time.sleep(0.2)
+        self.cliSock.close()
 
 
 
-    def sendemail(self, text):
+    def sendmail(self, text):
+        self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.cliSock.connect(ADDR)
         t = 'b' + text
+        #print(t)
         self.cliSock.send(bytes(t, encoding='utf-8'))
         time.sleep(0.2)
 
 
     def sendBlack(self, name):
+        self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.cliSock.connect(ADDR)
         t = 'c' + name
         self.cliSock.send(bytes(t, encoding='utf-8'))
         time.sleep(0.2)
+        self.cliSock.close()
 
 
     def sendWhite(self, name):
+        self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.cliSock.connect(ADDR)
         t = 'd' + name
         self.cliSock.send(bytes(t, encoding='utf-8'))
         time.sleep(0.2)
+        self.cliSock.close()
 
 
     def getresult(self):
+
         msg = self.cliSock.recv(4096)
-        t = str(msg, encoding='utf-8')
+        t = str(msg,encoding='utf-8')
         print(t)
-        return t
+        self.cliSock.close()
+        if t=='1':
+            return True
+        else:
+            return False
+
 
     def close(self):
         self.cliSock.close()
 
 if __name__ == "__main__":
         cli = Client()
-        cli.sendemail('mail')
-        cli.getresult()
+        cli.sendUsr('usr')
+        for i in range(0,3):
+          cli.sendmail('Please call our customer service representative on FREEPHONE 0808 145 4742 between 9am-11pm as you have WON a guaranteed ?1000 cash or ?5000 prize!')
+          cli.getresult()
+        cli.sendBlack('black')
+        cli.sendWhite('white')
         cli.close()
