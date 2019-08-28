@@ -1,108 +1,128 @@
 # -*- coding: utf-8 -*-
-import time
-from email.parser import Parser
-from email.header import decode_header
-from email.utils import parseaddr
-
-import poplib
-
-email = 'zquad112@163.com'
-password = 'zquad123'
-pop3_server = 'pop.163.com'
+import sqlite3
 
 
-def guess_charset(msg):
-    charset = msg.get_charset()
-    if charset is None:
-        content_type = msg.get('Content-Type', '').lower()
-        pos = content_type.find('charset=')
-        if pos >= 0:
-            charset = content_type[pos + 8:].strip()
-    return charset
-
-
-def decode_str(s):
-    value, charset = decode_header(s)[0]
-    if charset:
-        value = value.decode(charset)
-    return value
-
-
-def print_info(msg, indent=0):
-    if indent == 0:
-        for header in ['From', 'To', 'Subject']:
-            value = msg.get(header, '')
-            if value:
-                if header == 'Subject':
-                    value = decode_str(value)
-                else:
-                    hdr, addr = parseaddr(value)
-                    name = decode_str(hdr)
-                    value = u'%s <%s>' % (name, addr)
-            print('%s%s: %s' % ('  ' * indent, header, value))
-    if (msg.is_multipart()):
-        parts = msg.get_payload()
-        for n, part in enumerate(parts):
-            # print('%spart %s' % ('  ' * indent, n))
-            # print('%s--------------------' % ('  ' * indent))
-            print_info(part, indent + 1)
+def transferContent(content):
+    if content is None:
+        return None
     else:
-        content_type = msg.get_content_type()
-        if content_type == 'text/plain':  # or content_type=='text/html':
-            content = msg.get_payload(decode=True)
-            charset = guess_charset(msg)
-            if charset:
-                content = content.decode(charset)
-            print('%sText: %s' % ('' * indent, content + '.....'))
-        # else:
-        #    print('%sAttachment: %s' % ('  ' * indent, content_type))
+        string = ""
+        for c in content:
+            if c == '"':
+                string += ''
+            elif c == "'":
+                string += "\'"
+            elif c == "\\":
+                string += "\\\\"
+            else:
+                string += c
+        return string
 
 
-# 连接到POP3服务器:
-server = poplib.POP3_SSL(pop3_server, 995)
-# 可以打开或关闭调试信息:
-server.set_debuglevel(0)
-# 可选:打印POP3服务器的欢迎文字:
-print(server.getwelcome().decode('utf-8'))
-# 身份认证:
-server.user(email)
-server.pass_(password)
-# stat()返回邮件数量和占用空间:
+def create(usr):
+    conn = sqlite3.connect('test.db')
+    print("Opened database successfully")
+    c = conn.cursor()
+
+    c.execute('''CREATE TABLE usr
+           (
+           USR_NAME           TEXT    NOT NULL,
+           BLACKED_LIST       TEXT    NOT NULL,
+           WHITE_LIST         TEXT    NOT NULL);''')
+    print("Table created successfully")
+    conn.commit()
+    conn.close()
 
 
-# print('Messages: %s. Size: %s' % server.stat())
-# list()返回所有邮件的编号:
-resp, mails, octets = server.list()
-# 可以查看返回的列表类似[b'1 82923', b'2 2184', ...]
-# print(mails)
-index = len(mails)
-while index > 0:
+def creat_usr(mailusr):
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    print("Opened database successfully")
+    sql = 'INSERT INTO usr(USR_NAME,BLACKED_LIST,WHITE_LIST)\
+    VALUES("' + mailusr.usr + '","' + mailusr.blacklist + '","' + mailusr.whitelist + '")'
+    c.execute(sql)
 
-    # 获取最新一封邮件, 注意索引号从1开始:
-    while True:
-        time.sleep(2)
-        server.quit()
-        server = poplib.POP3_SSL(pop3_server, 995)
-        server.user(email)
-        server.pass_(password)
+    conn.commit()
+    print("Records created successfully")
+    conn.close()
 
-        para = index
-        resp, mails, octets = server.list()
-        index = len(mails)
-        if para != index:
-            resp, lines, octets = server.retr(index)
-            # lines存储了邮件的原始文本的每一行,
-            # 可以获得整个邮件的原始文本:
 
-            msg_content = b'\r\n'.join(lines).decode('utf-8')
-            # 稍后解析出邮件:
-            msg = Parser().parsestr(msg_content)
-            print_info(msg)
+def update_usr(mailusr):
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    print("Opened database successfully")
+    sql = 'INSERT INTO usr(USR_NAME,BLACKED_LIST,WHITE_LIST)\
+    VALUES("' + mailusr.usr + '","' + mailusr.blacklist + '","' + mailusr.whitelist + '")'
+    c.execute(sql)
 
-        # 可以根据邮件索引号直接从服务器删除邮件:
-        # server.delete(index)
+    conn.commit()
+    print("Records created successfully")
+    conn.close()
 
-index = index - 1
 
-# 关闭连接:
-server.quit()
+def get_all(mailusr):
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    print("Opened database successfully")
+
+    cursor = c.execute("SELECT USR_NAME,BLACKED_LIST,WHITE_LIST  from usr")
+
+    for row in cursor:
+        totallist = row[1]
+        print("USR_NAME = ", row[0])
+        print("BLACKED_LIST = ", row[1])
+        print("WHITE_LIST = ", row[2], "\n")
+        totallist += row[1]
+    mailusr.total = totallist
+    print("Operation done successfully")
+    conn.close()
+
+
+def search_usr(mailusr):
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    print("Opened database successfully")
+
+    sql = 'SELECT USR_NAME,BLACKED_LIST,WHITE_LIST  from usr WHERE USR_NAME="' + mailusr.usr + '"'
+    cursor = c.execute(sql)
+
+    for row in cursor:
+        blacklist = row[1]
+        blacklist += row[1]
+    mailusr.total = blacklist
+    print("Operation done successfully")
+    conn.close()
+
+
+if __name__ == "__main__":
+    usr = 'usr'
+    create(usr)
+
+'''
+def create(usr):
+    # 打开数据库连接
+    db = MySQLdb.connect("localhost", "root", "Seu123456.", "mydb", charset='utf8')
+
+    # 使用cursor()方法获取操作游标
+    cursor = db.cursor()
+
+    sql = transferContent('DROP TABLE IF EXISTS "' + usr + '"')
+
+    # 如果数据表已经存在使用 execute() 方法删除表。
+    cursor.execute(sql)
+
+    # 创建数据表SQL语句
+    # USR_NAME  CHAR(20) NOT NULL,
+
+    sql = transferContent('CREATE TABLE USR ( USR_NAME CHAR(20), BLACKED_NAME  CHAR(20),WHITE_NAME  CHAR(20) )')
+
+    cursor.execute(sql)
+
+    # 关闭数据库连接
+    db.close()
+
+
+if __name__ == "__main__":
+    usr = transferContent('usr')
+    create(usr)
+'''
