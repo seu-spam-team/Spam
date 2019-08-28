@@ -164,7 +164,7 @@ class MailUser:
                     elif header=='Date':
                         value = decode_str(value)
                         date = value
-            pre='Received: '+Rec+' From: '+sender+' Date: '+date+' To: '+to+' X-Mailer: '+X_m+'Subject: '+sub+' Message-ID: '+mes_id
+            #pre='Received: '+Rec+' From: '+sender+' Date: '+date+' To: '+to+' X-Mailer: '+X_m+'Subject: '+sub+' Message-ID: '+mes_id
             #print(pre)
 
             if msg is None:

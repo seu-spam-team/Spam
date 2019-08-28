@@ -24,28 +24,37 @@ def create(usr):
     print("Opened database successfully")
     c = conn.cursor()
 
-    c.execute('''CREATE TABLE usr
+    c.execute('''CREATE TABLE IF NOT EXISTS usr
            (
-           USR_NAME           TEXT    NOT NULL,
-           BLACKED_LIST       TEXT    NOT NULL,
-           WHITE_LIST         TEXT    NOT NULL);''')
+           USR_NAME           TEXT    ,
+           BLACKED_LIST       TEXT    ,
+           WHITE_LIST         TEXT    );''')
     print("Table created successfully")
     conn.commit()
     conn.close()
 
 
-def creat_usr(mailusr):
+def add_black(usr,black):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
     sql = 'INSERT INTO usr(USR_NAME,BLACKED_LIST,WHITE_LIST)\
-    VALUES("' + mailusr.usr + '","' + mailusr.blacklist + '","' + mailusr.whitelist + '")'
+    VALUES("' +usr + '","' + black + '","' +  "" + '")'
     c.execute(sql)
-
     conn.commit()
     print("Records created successfully")
     conn.close()
 
+def add_white(usr,white):
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    print("Opened database successfully")
+    sql = 'INSERT INTO usr(USR_NAME,BLACKED_LIST,WHITE_LIST)\
+    VALUES("' + usr + '","' + "" + '","' + white + '")'
+    c.execute(sql)
+    conn.commit()
+    print("Records created successfully")
+    conn.close()
 
 def update_usr(mailusr):
     conn = sqlite3.connect('test.db')
@@ -67,29 +76,24 @@ def get_all(mailusr):
 
     cursor = c.execute("SELECT USR_NAME,BLACKED_LIST,WHITE_LIST  from usr")
 
-    for row in cursor:
-        totallist = row[1]
-        print("USR_NAME = ", row[0])
-        print("BLACKED_LIST = ", row[1])
-        print("WHITE_LIST = ", row[2], "\n")
-        totallist += row[1]
-    mailusr.total = totallist
-    print("Operation done successfully")
+
+
+
     conn.close()
 
 
-def search_usr(mailusr):
+def search_usr(usr):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
 
-    sql = 'SELECT USR_NAME,BLACKED_LIST,WHITE_LIST  from usr WHERE USR_NAME="' + mailusr.usr + '"'
-    cursor = c.execute(sql)
+    sql='SELECT USR_NAME FROM usr WHERE USR_NAME="'+usr+' "'
+    sql1 = 'SELECT USR_NAME,group_concat(BLACKED_LIST) FROM usr group by USR_NAME'
+    cursor=c.execute(sql1)
+    #cursor=c.execute(sql)
 
     for row in cursor:
-        blacklist = row[1]
-        blacklist += row[1]
-    mailusr.total = blacklist
+        print(row[1])
     print("Operation done successfully")
     conn.close()
 
@@ -97,6 +101,10 @@ def search_usr(mailusr):
 if __name__ == "__main__":
     usr = 'usr'
     create(usr)
+    add_black('111','black')
+    #add_white('user','white')
+    search_usr('user')
+
 
 '''
 def create(usr):
