@@ -18,13 +18,14 @@ class Client:
         time.sleep(0.2)
         self.cliSock.close()
 
-    def sendmail(self, text):
+    def sendmail(self, text,level=0.5):
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.cliSock.connect(ADDR)
         t = 'b' + text
         #print(t)
         self.cliSock.send(bytes(t, encoding='utf-8'))
-        time.sleep(0.2)
+        time.sleep(0.1)
+
 
 
     def sendBlack(self, name):
@@ -63,9 +64,9 @@ class Client:
 if __name__ == "__main__":
         cli = Client()
         cli.sendUsr('usr')
-        # for i in range(0,3):
-        #   cli.sendmail('Please call our customer service representative on FREEPHONE 0808 145 4742 between 9am-11pm as you have WON a guaranteed ?1000 cash or ?5000 prize!')
-        #   cli.getresult()
+        for i in range(0,3):
+           cli.sendmail('Please call our customer service representative on FREEPHONE 0808 145 4742 between 9am-11pm as you have WON a guaranteed ?1000 cash or ?5000 prize!')
+
         cli.sendBlack('black')
         cli.sendWhite('white')
         cli.close()

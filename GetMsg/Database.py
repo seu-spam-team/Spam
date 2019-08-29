@@ -87,7 +87,7 @@ def get_all():
     return list
 
 
-def search_usr(usr):
+def black_list(usr):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
@@ -100,9 +100,33 @@ def search_usr(usr):
             list.append(row[1])
 
     print(list)
+    list1=set(list)
     print("Operation done successfully")
     conn.close()
-    return list
+    return list1
+
+
+def white_list(usr):
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    print("Opened database successfully")
+    list = []
+
+    sql = 'SELECT USR_NAME , group_concat(WHITE_LIST) FROM usr group by USR_NAME'
+    cursor = c.execute(sql)
+    for row in cursor:
+        if row[0] == usr:
+            list.append(row[2])
+
+    print(list)
+    list1 = set(list)
+    print("Operation done successfully")
+    conn.close()
+    return list1
+
+
+
+
 
 
 if __name__ == "__main__":
@@ -110,7 +134,7 @@ if __name__ == "__main__":
     create(usr)
     # add_black('user','black')
     # add_white('user','white')
-    search_usr('user')
+
 
 '''
 def create(usr):

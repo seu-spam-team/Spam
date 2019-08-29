@@ -9,10 +9,10 @@ import pickle
 from mailusr import MailUser
 import mainwindow
 from client import Client
-from classifier import classify
+
 from signal import *
 from newthread import MyThread
-from function import UI_MainWindow
+from function.MainWindow import *
 #窗口
 
 window=tk.Tk()

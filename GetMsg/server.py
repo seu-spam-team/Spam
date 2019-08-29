@@ -46,6 +46,7 @@ class ServerThread(threading.Thread):
 					pass
 				elif msg[0] == 'b':#正文分类     
 					msg = msg[1:]
+					print(msg)
 					if classifier.classify(msg):
 						self.cliSockfd.send(bytes('1',encoding='utf-8'))
 					else:
