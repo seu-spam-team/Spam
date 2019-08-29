@@ -102,6 +102,7 @@ def search_usr(usr):
     print(list)
     print("Operation done successfully")
     conn.close()
+    return list
 
 
 if __name__ == "__main__":
