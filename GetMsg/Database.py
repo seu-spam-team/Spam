@@ -34,28 +34,31 @@ def create(usr):
     conn.close()
 
 
-def add_black(usr,black):
+def add_black(usr, black):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
-    sql = 'INSERT INTO usr(USR_NAME,BLACKED_LIST,WHITE_LIST)\
-    VALUES("' +usr + '","' + black + '","' +  "" + '")'
+    sql = 'INSERT INTO usr(USR_NAME,BLACKED_LIST)\
+    VALUES("' + usr + '","' + black + '")'
     c.execute(sql)
     conn.commit()
     print("Records created successfully")
     conn.close()
 
-def add_white(usr,white):
+
+def add_white(usr, white):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
-    sql = 'INSERT INTO usr(USR_NAME,BLACKED_LIST,WHITE_LIST)\
-    VALUES("' + usr + '","' + "" + '","' + white + '")'
+    sql = 'INSERT INTO usr(USR_NAME,WHITE_LIST)\
+    VALUES("' + usr + '","' + white + '")'
     c.execute(sql)
     conn.commit()
     print("Records created successfully")
     conn.close()
 
+
+'''
 def update_usr(mailusr):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
@@ -67,33 +70,36 @@ def update_usr(mailusr):
     conn.commit()
     print("Records created successfully")
     conn.close()
+'''
 
 
-def get_all(mailusr):
+def get_all():
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
+    list = []
 
-    cursor = c.execute("SELECT USR_NAME,BLACKED_LIST,WHITE_LIST  from usr")
-
-
-
-
+    cursor = c.execute("SELECT USR_NAME,BLACKED_LIST,WHITE_LIST  from usr WHERE BLACKED_LIST NOT NULL ")
+    for row in cursor:
+        list.append(row[1])
+    print(list)
     conn.close()
+    return list
 
 
 def search_usr(usr):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
+    list = []
 
-    sql='SELECT USR_NAME FROM usr WHERE USR_NAME="'+usr+' "'
-    sql1 = 'SELECT USR_NAME,group_concat(BLACKED_LIST) FROM usr group by USR_NAME'
-    cursor=c.execute(sql1)
-    #cursor=c.execute(sql)
-
+    sql = 'SELECT USR_NAME , group_concat(BLACKED_LIST) FROM usr group by USR_NAME'
+    cursor = c.execute(sql)
     for row in cursor:
-        print(row[1])
+        if row[0]==usr:
+            list.append(row[1])
+
+    print(list)
     print("Operation done successfully")
     conn.close()
 
@@ -101,10 +107,9 @@ def search_usr(usr):
 if __name__ == "__main__":
     usr = 'usr'
     create(usr)
-    add_black('111','black')
-    #add_white('user','white')
+    # add_black('user','black')
+    # add_white('user','white')
     search_usr('user')
-
 
 '''
 def create(usr):
