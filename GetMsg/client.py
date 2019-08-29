@@ -2,7 +2,7 @@ import socket
 import time
 import sys
 
-HOST = '10.203.192.179'
+HOST = '10.203.211.207'
 PORT = 8080
 BUFIZ = 1024
 ADDR = (HOST, PORT)

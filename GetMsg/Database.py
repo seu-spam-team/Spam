@@ -19,7 +19,7 @@ def transferContent(content):
         return string
 
 
-def create(usr):
+def create():
     conn = sqlite3.connect('test.db')
     print("Opened database successfully")
     c = conn.cursor()

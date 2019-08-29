@@ -11,7 +11,7 @@ class Mail:
         self.subject=sub
         self.text=tex
         self.ifnormal=None
-        self.pre_test=None
+        self.pre_list=[]
 
     def out(self):
         print(self.send+"..."+self.senderIP+'....'+self.subject+"..."+self.text)
@@ -29,7 +29,9 @@ class Mail:
     def set_normal(self,label):
         self.ifnormal=label
     def set_pretest(self,pre):
-        self.pre_test=pre
+        self.pre_list=pre
+    def get_pretest(self):
+        return self.pre_list
     def get_test(self):
         return self.subject+' '+self.text
 
@@ -132,8 +134,8 @@ class MailUser:
 
 
     def parsemsg(self, msg):
-            pre=''
-            for header in ['From', 'X-Originating-IP','Date', 'Subject','Received','To','X-Mailer','Message-ID']:
+            pre=[]
+            for header in [ 'Received', 'X-Originating-IP', 'Date','From', 'To','Subject',  'X-Mailer', 'Message-ID']:
                 value = msg.get(header, '')
                 if value:
                     if header == 'Subject':
@@ -144,28 +146,19 @@ class MailUser:
                         name = decode_str(hdr)
                         value = u'%s <%s>' % (name, addr)
                         sender = value
-                    elif header == 'To':
+                    elif header=='To':
                         hdr, addr = parseaddr(value)
                         name = decode_str(hdr)
                         value = u'%s <%s>' % (name, addr)
-                        to = value
-                    elif header=='X-Originating-IP':
+                    elif header == 'X-Originating-IP':
                         value = decode_str(value)
                         ip = value
-                    elif header=='Received':
+                    else:
                         value = decode_str(value)
-                        Rec = value
-                    elif header=='X-Mailer':
-                        value = decode_str(value)
-                        X_m= value
-                    elif header=='Message-ID':
-                        value = decode_str(value)
-                        mes_id = value
-                    elif header=='Date':
-                        value = decode_str(value)
-                        date = value
-            #pre='Received: '+Rec+' From: '+sender+' Date: '+date+' To: '+to+' X-Mailer: '+X_m+'Subject: '+sub+' Message-ID: '+mes_id
-            #print(pre)
+                else:
+                    value=''
+                pre.append(value)
+            print(pre)
 
             if msg is None:
                 return None
@@ -225,6 +218,11 @@ class MailUser:
         t=num
         str=self.maillist[t].get_sub()+"    "+self.maillist[t].get_text()
         return str
+
+
+    def mail_pretest(self,num):
+        list=self.maillist[num].get_pretest()
+        return list
 
     def getmailhead(self):
         list=[]

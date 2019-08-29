@@ -4,7 +4,7 @@ import time
 import sys
 import os
 import threading
-
+import Database
 
 class ServerDaemon:
 
@@ -13,10 +13,10 @@ class ServerDaemon:
 
 	def __init__(self):
 		print('Server started.')
-		HOST = '139.219.132.178'
+		HOST = '10.203.211.207'
 		PORT = 8080
 		ADDR = (HOST,PORT)
-
+		Database.create()
 		sockfd = socket(AF_INET,SOCK_STREAM)
 		sockfd.bind(ADDR)
 		sockfd.listen(ServerDaemon.MAX_THREADS)
@@ -54,12 +54,14 @@ class ServerThread(threading.Thread):
 				elif msg[0] == 'c':#黑名单                     b
 					msg = msg[1:]
 					user = msg.split(' ')[0]
-					print(msg)
+					black=msg.split(' ')[1]
+					Database.add_black(user,black)
 					pass
 				elif msg[0] == 'd':#白名单                     b
 					msg = msg[1:]
 					user = msg.split(' ')[0]
-					print(msg)
+					white=msg.split(' ')[1]
+					Database.add_white(user, white)
 					pass
 				else:
 					print('无意义')
