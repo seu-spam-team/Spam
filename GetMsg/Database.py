@@ -119,8 +119,6 @@ def white_list(usr):
     for row in cursor:
         if row[0] == usr:
             list0.append(row[1])
-
-
     list1 = set(list0)
     list2=list(list1)
     print(list1)

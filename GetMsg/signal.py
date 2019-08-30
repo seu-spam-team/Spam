@@ -4,7 +4,7 @@
 from PyQt5.QtCore import QObject,pyqtSignal
 from PyQt5.QtWidgets import  QMessageBox
 from PyQt5 import QtWidgets
-import sys
+
 class SiganlObj(QObject):
      sendMsg=pyqtSignal(object) #∂®“Â–≈∫≈
 

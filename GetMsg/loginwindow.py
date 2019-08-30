@@ -7,10 +7,10 @@ import tkinter as tk
 import tkinter.messagebox
 import pickle
 from mailusr import MailUser
-import mainwindow
+import  sys
 from client import Client
-
-from signal import *
+from signal import SiganlObj
+from signal import TypeSlot
 from newthread import MyThread
 from function.MainWindow import *
 #窗口
