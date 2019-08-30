@@ -30,7 +30,7 @@ class Client:
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.cliSock.connect(ADDR)
         t = 'g' + usr+' '+sender
-        # print(t)
+        print(t)
         self.cliSock.send(bytes(t, encoding='utf-8'))
         time.sleep(0.1)
 
@@ -44,7 +44,7 @@ class Client:
 
 
 
-
+    #发送添加黑名单请求
     def sendBlack(self, name):
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.cliSock.connect(ADDR)
@@ -53,7 +53,7 @@ class Client:
         time.sleep(0.2)
         self.cliSock.close()
 
-
+    #发送添加白名单请求
     def sendWhite(self, name):
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.cliSock.connect(ADDR)
@@ -80,6 +80,8 @@ class Client:
 
     def getlist(self):
         msg = self.cliSock.recv(4096)
+        if msg==b'':
+            return []
         t = json.loads(msg.decode('utf-8'))
         print(t)
         self.cliSock.close()
@@ -102,10 +104,11 @@ class Client:
 
 if __name__ == "__main__":
         cli = Client()
-        cli.sendfrom('haonan_0204@163.com','hei')
+        cli.sendBlack('haonan_0204@163.com hei')
+        cli.sendWhite('hapnan_0204@163.com bai')
+        cli.sendfrom('haonan_0204@163.com','....')
         cli.get_sender()
         cli.sendfrom('haonan_0204@163.com', 'bai')
         cli.get_sender()
-        cli.sendfrom('haonan_0204@163.com', 'bi')
-        cli.get_sender()
+
 

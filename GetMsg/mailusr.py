@@ -144,7 +144,7 @@ class MailUser:
                     elif header == 'From':
                         hdr, addr = parseaddr(value)
                         name = decode_str(hdr)
-                        value = u'%s <%s>' % (name, addr)
+                        value = name+'<'+addr+'>'
                         sender = value
                     elif header=='To':
                         hdr, addr = parseaddr(value)
@@ -180,7 +180,7 @@ class MailUser:
             time.sleep(10)
             self.server.quit()
             self.server = poplib.POP3(self.pop3_server)
-            self.server.set_debuglevel(0)
+            self.server.set_debuglevel(1)
             self.server.user(self.user)
             self.server.pass_(self.password)
             self.server.stat()
@@ -217,6 +217,12 @@ class MailUser:
     def mailtext(self,num):
         t=num
         str=self.maillist[t].get_sub()+"    "+self.maillist[t].get_text()
+        return str
+
+
+    def mailsender(self,num):
+        t = num
+        str = self.maillist[t].get_sender()
         return str
 
 

@@ -72,12 +72,21 @@ def usr_log_in():
             mailusr.getmails()
             num=mailusr.getmailnum()
             for i in range(0,num):
-                test=mailusr.mailtext(i)
-                clisock.sendmail(test)
-                #label=classify(test)
-                label=clisock.getresult()
-                print('测试内容  ',test,  "结果  " ,label)
-                mailusr.setlabel(i,label)
+                send=mailusr.mailsender(i)
+                clisock.sendfrom(usr_name,send)
+                rs=clisock.get_sender()
+                print(rs)
+                if rs=='1':
+                    mailusr.setlabel(i, False)
+                elif rs=='2':
+                    mailusr.setlabel(i,True)
+                elif rs=='3':
+                    test=mailusr.mailtext(i)
+                    clisock.sendmail(test)
+                    #label=classify(test)
+                    label=clisock.getresult()
+                    print('测试内容  ',test,  "结果  " ,label)
+                    mailusr.setlabel(i,label)
 
             signal = SiganlObj()
             slot = TypeSlot()

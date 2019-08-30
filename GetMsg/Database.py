@@ -105,6 +105,7 @@ def black_list(usr):
     print("Operation done successfully")
     conn.close()
     list3 = list2[0].split(',')
+    list3 = list(set(list3))
     return list3
 
 
@@ -121,10 +122,11 @@ def white_list(usr):
             list0.append(row[1])
     list1 = set(list0)
     list2=list(list1)
-    print(list1)
+    print(list2)
     print("Operation done successfully")
     conn.close()
     list3=list2[0].split(',')
+    list3=list(set(list3))
     return list3
 
 
@@ -133,10 +135,8 @@ def white_list(usr):
 
 
 if __name__ == "__main__":
-    add_black('haonan_0204','bb')
-    add_white('haonan_0','ww')
-    black_list('haonan_0204@163.com')
-    white_list('haonan_0204@163.com')
+    create()
+    add_white('haonan_0204@163.com','whn<whn_946@163.com>')
 
 
 '''

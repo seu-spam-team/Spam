@@ -77,8 +77,10 @@ class ServerThread(threading.Thread):
 					self.cliSockfd.send(js.encode('utf-8'))
 				elif msg[0]=='g':
 					msg=msg[1:]
+					print(msg)
 					user = msg.split(' ')[0]
 					sender = msg.split(' ')[1]
+					print(user,sender)
 					blacklist=Database.black_list(user)
 					whitelist=Database.white_list(user)
 					if sender in blacklist:
