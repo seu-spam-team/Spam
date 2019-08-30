@@ -9,8 +9,8 @@ import pickle
 from mailusr import MailUser
 import  sys
 from client import Client
-from signal import SiganlObj
-from signal import TypeSlot
+from siglot import *
+
 from newthread import MyThread
 from function.MainWindow import *
 #窗口
@@ -87,6 +87,8 @@ def usr_log_in():
                     label=clisock.getresult()
                     print('测试内容  ',test,  "结果  " ,label)
                     mailusr.setlabel(i,label)
+
+
 
             signal = SiganlObj()
             slot = TypeSlot()
