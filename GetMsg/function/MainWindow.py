@@ -62,18 +62,22 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         qe.exec()
 
     def checkBlackList(self):
-        print('123132156')
-        blacklistwindow = UI_BlackWhiteList()
+        usr=self.username.text()
+        self.clisock.sendgetblack(usr)
+        list=self.clisock.getlist()
+        blacklistwindow = UI_BlackWhiteList(list)
         blacklistwindow.setWindowTitle("黑名单")
         blacklistwindow.show()
         qe = QEventLoop()
         qe.exec()
 
     def checkWhiteList(self):
-        print('12')
-        whitelistwindow = UI_BlackWhiteList()
-        whitelistwindow.setWindowTitle("白名单")
-        whitelistwindow.show()
+        usr = self.username.text()
+        self.clisock.sendgetwhite(usr)
+        list = self.clisock.getlist()
+        blacklistwindow = UI_BlackWhiteList(list)
+        blacklistwindow.setWindowTitle("白名单")
+        blacklistwindow.show()
         qe = QEventLoop()
         qe.exec()
 

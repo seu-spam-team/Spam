@@ -5,6 +5,7 @@ import sys
 import os
 import threading
 import Database
+import json
 
 class ServerDaemon:
 
@@ -64,6 +65,16 @@ class ServerThread(threading.Thread):
 					white=msg.split(' ')[1]
 					Database.add_white(user, white)
 					pass
+				elif msg[0]=='e':
+					msg=msg[1:]
+					list=Database.black_list(msg)
+					js=json.dumps(list)
+					self.cliSockfd.send(js.encode('utf-8'))
+				elif msg[0]=='f':
+					msg=msg[1:]
+					list=Database.white_list(msg)
+					js=json.dumps(list)
+					self.cliSockfd.send(js.encode('utf-8'))
 				else:
 					print('无意义')
 		except:

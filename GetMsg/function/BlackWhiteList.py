@@ -5,16 +5,16 @@ import blackwhitelist
 
 
 class UI_BlackWhiteList(QtWidgets.QWidget, blackwhitelist.Ui_BlackWhiteList):
-    def __init__(self):
+    def __init__(self,list):
         super(UI_BlackWhiteList, self).__init__()
         self.setupUi(self)
         self.blackwhitelist.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.testAdd()
+        self.testAdd(list)
         self.deletebutton.clicked.connect(self.deleteBlackWhiteListItem)
 
-    def testAdd(self):
-        blacklist = ["black list1", "black list2", "black list3", "black list4", "black list5", "black list6", "black list7"]
-        self.blackwhitelist.addItems(blacklist)
+    def testAdd(self,list):
+        # blacklist = ["black list1", "black list2", "black list3", "black list4", "black list5", "black list6", "black list7"]
+        self.blackwhitelist.addItems(list)
 
     def deleteBlackWhiteListItem(self):
         # selectedItems = self.blacklist.selectedItems()

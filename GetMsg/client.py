@@ -1,7 +1,7 @@
 import socket
 import time
 import sys
-
+import json
 HOST = '10.203.211.207'
 PORT = 8080
 BUFIZ = 1024
@@ -45,6 +45,28 @@ class Client:
         time.sleep(0.2)
         self.cliSock.close()
 
+    def sendgetblack(self,usr):
+        self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.cliSock.connect(ADDR)
+        t = 'e'+usr
+        self.cliSock.send(bytes(t, encoding='utf-8'))
+        time.sleep(0.2)
+
+    def sendgetwhite(self,usr):
+        self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.cliSock.connect(ADDR)
+        t = 'f'+usr
+        self.cliSock.send(bytes(t, encoding='utf-8'))
+        time.sleep(0.2)
+
+
+
+    def getlist(self):
+        msg = self.cliSock.recv(4096)
+        t = json.loads(msg.decode('utf-8'))
+        print(t)
+        self.cliSock.close()
+        return t
 
     def getresult(self):
 
@@ -63,10 +85,5 @@ class Client:
 
 if __name__ == "__main__":
         cli = Client()
-        cli.sendUsr('usr')
-        for i in range(0,3):
-           cli.sendmail('Please call our customer service representative on FREEPHONE 0808 145 4742 between 9am-11pm as you have WON a guaranteed ?1000 cash or ?5000 prize!')
-
-        cli.sendBlack('black')
-        cli.sendWhite('white')
-        cli.close()
+        cli.sendgetwhite('haonan_0204@163.com')
+        cli.getlist()

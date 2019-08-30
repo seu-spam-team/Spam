@@ -91,38 +91,43 @@ def black_list(usr):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
-    list = []
+    list0 = []
 
     sql = 'SELECT USR_NAME , group_concat(BLACKED_LIST) FROM usr group by USR_NAME'
     cursor = c.execute(sql)
     for row in cursor:
         if row[0]==usr:
-            list.append(row[1])
+            list0.append(row[1])
 
-    print(list)
-    list1=set(list)
+    print(list0)
+    list1=set(list0)
+    list2=list(list1)
     print("Operation done successfully")
     conn.close()
-    return list1
+    list3 = list2[0].split(',')
+    return list3
 
 
 def white_list(usr):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
     print("Opened database successfully")
-    list = []
+    list0 = []
 
     sql = 'SELECT USR_NAME , group_concat(WHITE_LIST) FROM usr group by USR_NAME'
     cursor = c.execute(sql)
     for row in cursor:
         if row[0] == usr:
-            list.append(row[2])
+            list0.append(row[1])
 
-    print(list)
-    list1 = set(list)
+
+    list1 = set(list0)
+    list2=list(list1)
+    print(list1)
     print("Operation done successfully")
     conn.close()
-    return list1
+    list3=list2[0].split(',')
+    return list3
 
 
 
@@ -130,10 +135,10 @@ def white_list(usr):
 
 
 if __name__ == "__main__":
-    usr = 'usr'
-    create(usr)
-    # add_black('user','black')
-    # add_white('user','white')
+    add_black('haonan_0204','bb')
+    add_white('haonan_0','ww')
+    black_list('haonan_0204@163.com')
+    white_list('haonan_0204@163.com')
 
 
 '''
