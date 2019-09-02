@@ -14,7 +14,7 @@ class ServerDaemon:
 
 	def __init__(self):
 		print('Server started.')
-		HOST = '10.203.191.162'
+		HOST = '10.203.194.161'
 		PORT = 8080
 		ADDR = (HOST,PORT)
 		Database.create()
@@ -89,6 +89,12 @@ class ServerThread(threading.Thread):
 						self.cliSockfd.send(bytes('2', encoding='utf-8'))
 					else:
 						self.cliSockfd.send(bytes('3', encoding='utf-8'))
+				elif msg=='h':
+					msg=msg[1:]
+					user = msg.split(' ')[0]
+					listname = msg.split(' ')[1]
+                    
+
 				else:
 					print('无意义')
 		except:

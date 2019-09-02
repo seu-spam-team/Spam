@@ -18,7 +18,7 @@ class TypeSlot(QObject):#定义槽对象
          super(TypeSlot, self).__init__()
      def get(self,msg):#定义槽函数
          print(">>",msg)
-         if msg=='':
+         if msg=='正常':
            QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信")
          elif msg=='垃圾':
            QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信,疑似为垃圾邮件")

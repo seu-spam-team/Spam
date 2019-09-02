@@ -2,7 +2,7 @@ import socket
 import time
 import sys
 import json
-HOST = '10.203.191.162'
+HOST = '10.203.194.161'
 PORT = 8080
 BUFIZ = 1024
 ADDR = (HOST, PORT)
@@ -40,6 +40,14 @@ class Client:
         print(t)
         self.cliSock.close()
         return t
+
+    def deletelist(self,usr,listname):
+        self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.cliSock.connect(ADDR)
+        t = 'c' + usr+' '+listname
+        self.cliSock.send(bytes(t, encoding='utf-8'))
+        time.sleep(0.2)
+        self.cliSock.close()
 
 
 
