@@ -41,14 +41,21 @@ class Client:
         self.cliSock.close()
         return t
 
-    def deletelist(self,usr,listname):
+    def deletewhite(self,usr,listname):
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.cliSock.connect(ADDR)
-        t = 'c' + usr+' '+listname
+        t = 'h' + usr+' '+listname
         self.cliSock.send(bytes(t, encoding='utf-8'))
         time.sleep(0.2)
         self.cliSock.close()
 
+    def deleteblack(self, usr, listname):
+        self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.cliSock.connect(ADDR)
+        t = 'i' + usr + ' ' + listname
+        self.cliSock.send(bytes(t, encoding='utf-8'))
+        time.sleep(0.2)
+        self.cliSock.close()
 
 
 
@@ -96,7 +103,6 @@ class Client:
         return t
 
     def getresult(self):
-
         msg = self.cliSock.recv(4096)
         t = str(msg,encoding='utf-8')
         print(t)
@@ -112,11 +118,6 @@ class Client:
 
 if __name__ == "__main__":
         cli = Client()
-        cli.sendBlack('haonan_0204@163.com hei')
-        cli.sendWhite('hapnan_0204@163.com bai')
-        cli.sendfrom('haonan_0204@163.com','....')
-        cli.get_sender()
-        cli.sendfrom('haonan_0204@163.com', 'bai')
-        cli.get_sender()
+        cli.deleteblack('haonan_0204@163.com','hei')
 
 
