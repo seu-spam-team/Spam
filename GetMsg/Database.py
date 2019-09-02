@@ -130,13 +130,31 @@ def white_list(usr):
     return list3
 
 
+def delete_black(usr_name,list_name):
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    print("Opened database successfully")
+    sql = 'DELETE FROM usr WHERE BLACKED_LIST="' + list_name + '" AND USR_NAME="'+usr_name+'"'
+    c.execute(sql)
+    conn.commit()
+    print("Total number of rows deleted :", conn.total_changes)
+    conn.close()
 
+def delete_white(usr_name,list_name):
+    conn = sqlite3.connect('test.db')
+    c = conn.cursor()
+    print("Opened database successfully")
+    sql = 'DELETE FROM usr WHERE WHITE_LIST="' + list_name + '" AND USR_NAME="' + usr_name + '"'
+    c.execute(sql)
+    conn.commit()
+    print("Total number of rows deleted :", conn.total_changes)
+    conn.close()
 
 
 
 if __name__ == "__main__":
     create()
-    add_white('haonan_0204@163.com','whn<whn_946@163.com>')
+    delete_white('haonan_0204@163.com','whn<whn_946@163.com>')
 
 
 '''
