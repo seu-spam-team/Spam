@@ -14,6 +14,7 @@ class Ui_BlackWhiteList(object):
     def setupUi(self, BlackWhiteList):
         BlackWhiteList.setObjectName("BlackWhiteList")
         BlackWhiteList.resize(609, 401)
+        BlackWhiteList.setWindowModality(QtCore.Qt.ApplicationModal)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(BlackWhiteList)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.blackwhitelist = QtWidgets.QListWidget(BlackWhiteList)

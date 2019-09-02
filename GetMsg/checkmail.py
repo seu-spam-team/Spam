@@ -14,6 +14,7 @@ class Ui_CheckMail(object):
     def setupUi(self, CheckMail):
         CheckMail.setObjectName("CheckMail")
         CheckMail.resize(898, 594)
+        CheckMail.setWindowModality(QtCore.Qt.ApplicationModal)
         self.verticalLayout = QtWidgets.QVBoxLayout(CheckMail)
         self.verticalLayout.setObjectName("verticalLayout")
         self.sender = QtWidgets.QLabel(CheckMail)

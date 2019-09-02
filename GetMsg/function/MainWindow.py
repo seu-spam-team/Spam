@@ -16,7 +16,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.clisock = clisock
 
     def sendMail(self):
-        sendmail = UI_SendMail()
+        sendmail = UI_SendMail(self.mailusr)
         sendmail.show()
         qe = QEventLoop()
         qe.exec()

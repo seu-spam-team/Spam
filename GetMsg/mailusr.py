@@ -5,9 +5,9 @@ from email.header import decode_header
 from email.utils import parseaddr
 
 class Mail:
-    def __init__(self,sen,ip,sub,tex):
+    def __init__(self,sen,sub,tex):
         self.send=sen
-        self.senderIP=ip
+        self.senderIP=None
         self.subject=sub
         self.text=tex
         self.ifnormal=None
@@ -167,7 +167,7 @@ class MailUser:
                     text = self.get_content(part)
                     #print("emailcontent:" + text)
                     break
-            mail = Mail(sender, ip,sub, text)
+            mail = Mail(sender, sub, text)
             #mail.out()
             return mail
 
@@ -177,7 +177,7 @@ class MailUser:
         resp, mails, octets = self.server.list()
         currentnumber = len(mails)
         while True:
-            time.sleep(10)
+            time.sleep(5)
             self.server.quit()
             self.server = poplib.POP3(self.pop3_server)
             self.server.set_debuglevel(1)
@@ -269,6 +269,10 @@ class MailUser:
          self.maillist[num].set_normal(label)
 
 
+    def getname(self):
+        return self.user
+    def getpwd(self):
+        return self.password
 
 
     def quit(self):
