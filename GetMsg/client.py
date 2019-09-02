@@ -30,7 +30,6 @@ class Client:
         self.cliSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.cliSock.connect(ADDR)
         t = 'g' + usr+' '+sender
-        print(t)
         self.cliSock.send(bytes(t, encoding='utf-8'))
         time.sleep(0.1)
 
@@ -118,6 +117,7 @@ class Client:
 
 if __name__ == "__main__":
         cli = Client()
-        cli.deleteblack('haonan_0204@163.com','hei')
+        cli.sendfrom('1111','22222')
+        cli.get_sender()
 
 

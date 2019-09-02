@@ -104,6 +104,8 @@ def black_list(usr):
     list2=list(list1)
     print("Operation done successfully")
     conn.close()
+    if len(list2)==0:
+        return list2
     list3 = list2[0].split(',')
     list3 = list(set(list3))
     return list3
@@ -125,6 +127,8 @@ def white_list(usr):
     print(list2)
     print("Operation done successfully")
     conn.close()
+    if len(list2)==0:
+        return list2
     list3=list2[0].split(',')
     list3=list(set(list3))
     return list3
