@@ -5,7 +5,7 @@ from function.BlackWhiteList import UI_BlackWhiteList
 from function.CheckMail import UI_CheckMail
 from function.SendMail import UI_SendMail
 import mainwindow
-
+import re
 
 class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def __init__(self,mailusr,clisock):
@@ -55,8 +55,16 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         return indexItems[0].row()
 
     def checkMail(self):  # 查看邮件(正常和垃圾)
-        print(self.locateEachMail())
-        checkwindow = UI_CheckMail()
+        num=self.locateEachMail()
+        t = self.mailList.item(num).text()
+        print((t))
+        sender = (re.findall(r"sender: (.+?)sub", t))
+        sender=(sender[0])
+        sub=(re.findall(r"subject:(.+?)\ntext", t,re.S))
+        sub=(sub[0])
+        text=re.findall(r"text:(.+.)", t)
+        text=(text[0])
+        checkwindow = UI_CheckMail(sender,sub,text)
         checkwindow.show()
         qe = QEventLoop()
         qe.exec()

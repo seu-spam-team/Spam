@@ -55,7 +55,7 @@ def usr_log_in():
     mailusr=MailUser(usr_name,usr_pwd)
     sta = mailusr.login(usr_name,usr_pwd)
     if sta == "not connected":
-            tk.messagebox.showerror(title='警告',message='网络未连接：')
+            tk.messagebox.showerror(title='警告',message='网络未连接')
     elif sta == 'login fail':
             tk.messagebox.showerror(message='密码错误')
 
