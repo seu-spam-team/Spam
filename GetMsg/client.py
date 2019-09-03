@@ -36,7 +36,7 @@ class Client:
     def get_sender(self):
         msg = self.cliSock.recv(4096)
         t = str(msg, encoding='utf-8')
-        print(t)
+        #print(t)
         self.cliSock.close()
         return t
 
@@ -97,14 +97,14 @@ class Client:
         if msg==b'':
             return []
         t = json.loads(msg.decode('utf-8'))
-        print(t)
+        #print(t)
         self.cliSock.close()
         return t
 
     def getresult(self):
         msg = self.cliSock.recv(4096)
         t = str(msg,encoding='utf-8')
-        print(t)
+        #print(t)
         self.cliSock.close()
         if t=='1':
             return True

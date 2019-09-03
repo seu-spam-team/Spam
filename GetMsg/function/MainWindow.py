@@ -6,7 +6,8 @@ from function.CheckMail import UI_CheckMail
 from function.SendMail import UI_SendMail
 import mainwindow
 import re
-
+import mailwrite
+import sys
 class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def __init__(self,mailusr,clisock):
         super(UI_MainWindow, self).__init__()
@@ -14,6 +15,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.connectButtons()
         self.mailusr = mailusr
         self.clisock = clisock
+        self.mPos = None
 
     def sendMail(self):
         sendmail = UI_SendMail(self.mailusr)
@@ -45,7 +47,11 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.username.setText(str)
 
     def logOut(self):
+        dict=self.mailusr.maildic()
+        mailwrite.write(dict)
+        mailwrite.read()
         QCoreApplication.instance().quit()
+
 
     def locateEachMail(self):
         # textlist = self.mailList.selectedItems() #返回的是列表，用迭代器访问
@@ -58,6 +64,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         num=self.locateEachMail()
         t = self.mailList.item(num).text()
         print((t))
+        self.mailusr.mailnum(t)
         sender = (re.findall(r"sender: (.+?)sub", t))
         sender=(sender[0])
         sub=(re.findall(r"subject:(.+?)\ntext", t,re.S))

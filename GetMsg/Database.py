@@ -21,7 +21,7 @@ def transferContent(content):
 
 def create():
     conn = sqlite3.connect('test.db')
-    print("Opened database successfully")
+   # print("Opened database successfully")
     c = conn.cursor()
 
     c.execute('''CREATE TABLE IF NOT EXISTS usr
@@ -29,7 +29,7 @@ def create():
            USR_NAME           TEXT    ,
            BLACKED_LIST       TEXT    ,
            WHITE_LIST         TEXT    );''')
-    print("Table created successfully")
+   # print("Table created successfully")
     conn.commit()
     conn.close()
 
@@ -37,24 +37,24 @@ def create():
 def add_black(usr, black):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
-    print("Opened database successfully")
+    #print("Opened database successfully")
     sql = 'INSERT INTO usr(USR_NAME,BLACKED_LIST)\
     VALUES("' + usr + '","' + black + '")'
     c.execute(sql)
     conn.commit()
-    print("Records created successfully")
+    #print("Records created successfully")
     conn.close()
 
 
 def add_white(usr, white):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
-    print("Opened database successfully")
+    #print("Opened database successfully")
     sql = 'INSERT INTO usr(USR_NAME,WHITE_LIST)\
     VALUES("' + usr + '","' + white + '")'
     c.execute(sql)
     conn.commit()
-    print("Records created successfully")
+    #print("Records created successfully")
     conn.close()
 
 
@@ -76,13 +76,13 @@ def update_usr(mailusr):
 def get_all():
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
-    print("Opened database successfully")
+    #print("Opened database successfully")
     list = []
 
     cursor = c.execute("SELECT USR_NAME,BLACKED_LIST,WHITE_LIST  from usr WHERE BLACKED_LIST NOT NULL ")
     for row in cursor:
         list.append(row[1])
-    print(list)
+   # print(list)
     conn.close()
     return list
 
@@ -90,7 +90,7 @@ def get_all():
 def black_list(usr):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
-    print("Opened database successfully")
+   # print("Opened database successfully")
     list0 = []
 
     sql = 'SELECT USR_NAME , group_concat(BLACKED_LIST) FROM usr group by USR_NAME'
@@ -102,7 +102,7 @@ def black_list(usr):
     print(list0)
     list1=set(list0)
     list2=list(list1)
-    print("Operation done successfully")
+   # print("Operation done successfully")
     conn.close()
     if len(list2)==0:
         return list2
@@ -114,7 +114,7 @@ def black_list(usr):
 def white_list(usr):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
-    print("Opened database successfully")
+    #print("Opened database successfully")
     list0 = []
 
     sql = 'SELECT USR_NAME , group_concat(WHITE_LIST) FROM usr group by USR_NAME'
@@ -125,7 +125,7 @@ def white_list(usr):
     list1 = set(list0)
     list2=list(list1)
     print(list2)
-    print("Operation done successfully")
+    #print("Operation done successfully")
     conn.close()
     if len(list2)==0:
         return list2
@@ -137,7 +137,7 @@ def white_list(usr):
 def delete_black(usr_name,list_name):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
-    print("Opened database successfully")
+    #print("Opened database successfully")
     sql = 'DELETE FROM usr WHERE BLACKED_LIST="' + list_name + '" AND USR_NAME="'+usr_name+'"'
     c.execute(sql)
     conn.commit()
@@ -147,7 +147,7 @@ def delete_black(usr_name,list_name):
 def delete_white(usr_name,list_name):
     conn = sqlite3.connect('test.db')
     c = conn.cursor()
-    print("Opened database successfully")
+    #print("Opened database successfully")
     sql = 'DELETE FROM usr WHERE WHITE_LIST="' + list_name + '" AND USR_NAME="' + usr_name + '"'
     c.execute(sql)
     conn.commit()

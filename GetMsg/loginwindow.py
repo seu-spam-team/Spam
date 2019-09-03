@@ -10,7 +10,7 @@ from mailusr import MailUser
 import  sys
 from client import Client
 from siglot import *
-
+import mainwindow
 from newthread import MyThread
 from function.MainWindow import *
 #窗口
@@ -72,21 +72,26 @@ def usr_log_in():
             mailusr.getmails()
             num=mailusr.getmailnum()
             for i in range(0,num):
-                send=mailusr.mailsender(i)
-                clisock.sendfrom(usr_name,send)
-                rs=clisock.get_sender()
-                print(rs)
-                if rs=='1':
-                    mailusr.setlabel(i, False)
-                elif rs=='2':
-                    mailusr.setlabel(i,True)
-                elif rs=='3':
-                    test=mailusr.mailtext(i)
-                    clisock.sendmail(test)
-                    #label=classify(test)
-                    label=clisock.getresult()
-                    print('测试内容  ',test,  "结果  " ,label)
-                    mailusr.setlabel(i,label)
+                key=mailusr.getkey(i)
+                result=mailwrite.compare(key)
+                if result==2:
+                    send=mailusr.mailsender(i)
+                    clisock.sendfrom(usr_name,send)
+                    rs=clisock.get_sender()
+                    #print(rs)
+                    if rs=='1':
+                        mailusr.setlabel(i, False)
+                    elif rs=='2':
+                        mailusr.setlabel(i,True)
+                    elif rs=='3':
+                        test=mailusr.mailtext(i)
+                        clisock.sendmail(test)
+                        #label=classify(test)
+                        label=clisock.getresult()
+                        print('测试内容  ',test,  "结果  " ,label)
+                        mailusr.setlabel(i,label)
+                else:
+                    mailusr.setlabel(i, result)
 
 
 
