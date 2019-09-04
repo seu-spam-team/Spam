@@ -5,8 +5,9 @@ from function.BlackWhiteList import UI_BlackWhiteList
 from function.CheckMail import UI_CheckMail
 from function.SendMail import UI_SendMail
 import mainwindow
-
-
+import re
+import mailwrite
+import sys
 class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def __init__(self,mailusr,clisock):
         super(UI_MainWindow, self).__init__()
@@ -14,20 +15,23 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.connectButtons()
         self.mailusr = mailusr
         self.clisock = clisock
+        self.mPos = None
 
     def sendMail(self):
-        sendmail = UI_SendMail()
+        sendmail = UI_SendMail(self.mailusr)
         sendmail.show()
         qe = QEventLoop()
         qe.exec()
 
     def clickNormal(self): #查看收件箱
         self.mailList.clear()
+        self.moveto.setText("移至垃圾箱")
         normallist = self.mailusr.get_normalmail()
         self.mailList.addItems(normallist)
 
     def clickTrash(self): #查看垃圾箱
         self.mailList.clear()
+        self.moveto.setText("移至收件箱")
         trashlist = self.mailusr.get_badmail()
         self.mailList.addItems(trashlist)
 
@@ -45,7 +49,11 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.username.setText(str)
 
     def logOut(self):
+        usr = self.username.text()
+        dict=self.mailusr.maildic()
+        mailwrite.write(usr,dict)
         QCoreApplication.instance().quit()
+
 
     def locateEachMail(self):
         # textlist = self.mailList.selectedItems() #返回的是列表，用迭代器访问
@@ -55,8 +63,17 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         return indexItems[0].row()
 
     def checkMail(self):  # 查看邮件(正常和垃圾)
-        print(self.locateEachMail())
-        checkwindow = UI_CheckMail()
+        num=self.locateEachMail()
+        t = self.mailList.item(num).text()
+        print((t))
+        self.mailusr.mailnum(t)
+        sender = (re.findall(r"sender: (.+?)sub", t))
+        sender=(sender[0])
+        sub=(re.findall(r"subject:(.+?)\ntext", t,re.S))
+        sub=(sub[0])
+        text=re.findall(r"text:(.+.)", t)
+        text=(text[0])
+        checkwindow = UI_CheckMail(sender,sub,text)
         checkwindow.show()
         qe = QEventLoop()
         qe.exec()
@@ -65,7 +82,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         usr=self.username.text()
         self.clisock.sendgetblack(usr)
         list=self.clisock.getlist()
-        blacklistwindow = UI_BlackWhiteList(list)
+        blacklistwindow = UI_BlackWhiteList(list,usr,self.clisock)
         blacklistwindow.setWindowTitle("黑名单")
         blacklistwindow.show()
         qe = QEventLoop()
@@ -75,7 +92,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         usr = self.username.text()
         self.clisock.sendgetwhite(usr)
         list = self.clisock.getlist()
-        blacklistwindow = UI_BlackWhiteList(list)
+        blacklistwindow = UI_BlackWhiteList(list,usr,self.clisock)
         blacklistwindow.setWindowTitle("白名单")
         blacklistwindow.show()
         qe = QEventLoop()
@@ -87,6 +104,18 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def getWhiteList(self):
         return self.whitelist.text()
 
+    def clickmoveto(self):
+        act=self.moveto.text()
+        n=self.locateEachMail()
+        text = self.mailList.item(n).text()
+        mailnum=self.mailusr.mailnum(text)
+        if act=='移至垃圾箱':
+            self.mailusr.setlabel(mailnum,False)
+        if act=='移至收件箱':
+            self.mailusr.setlabel(mailnum, True)
+        self.mailList.removeItemWidget(self.mailList.takeItem(n))
+
+
     def connectButtons(self):
         self.sendmail.clicked.connect(self.sendMail)
         self.normal.clicked.connect(self.clickNormal)
@@ -97,6 +126,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.whiteconfirm.clicked.connect(self.clickWhiteConfirm)
         self.checkblacklist.clicked.connect(self.checkBlackList)
         self.checkwhitelist.clicked.connect(self.checkWhiteList)
+        self.moveto.clicked.connect(self.clickmoveto)
 
 
 if __name__ == "__main__":

@@ -24,7 +24,16 @@ class TypeSlot(QObject):#定义槽对象
            QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信,疑似为垃圾邮件")
 
 if __name__=='__main__':
-    send=SiganlObj()
-    slot=TypeSlot()
-    send.sendMsg.connect(slot.get)#绑定信号和槽函数
-    send.run()#发信号
+    # send=SiganlObj()
+    # slot=TypeSlot()
+    # send.sendMsg.connect(slot.get)#绑定信号和槽函数
+    # send.run()#发信号
+    t='sender:131315 sub: dasda \n text: neirong'
+    import re
+
+    str = "a123b"
+
+    sender=(re.findall(r"sender:(.+?) sub", t))  #
+    print(sender[0])
+
+

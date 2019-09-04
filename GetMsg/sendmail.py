@@ -14,6 +14,7 @@ class Ui_SendMail(object):
     def setupUi(self, SendMail):
         SendMail.setObjectName("SendMail")
         SendMail.resize(815, 553)
+        SendMail.setWindowModality(QtCore.Qt.ApplicationModal)
         self.verticalLayout = QtWidgets.QVBoxLayout(SendMail)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()

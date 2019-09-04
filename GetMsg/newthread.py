@@ -5,6 +5,7 @@ import time
 class MyThread (threading.Thread):
     def __init__(self, mailusr,signal,sock):
         threading.Thread.__init__(self)
+        threading.Thread.setDaemon(self,True)
         self.mailusr = mailusr
         self.signal = signal
         self.sock=sock

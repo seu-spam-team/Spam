@@ -10,7 +10,7 @@ from mailusr import MailUser
 import  sys
 from client import Client
 from siglot import *
-
+import mainwindow
 from newthread import MyThread
 from function.MainWindow import *
 #窗口
@@ -55,7 +55,7 @@ def usr_log_in():
     mailusr=MailUser(usr_name,usr_pwd)
     sta = mailusr.login(usr_name,usr_pwd)
     if sta == "not connected":
-            tk.messagebox.showerror(title='警告',message='网络未连接：')
+            tk.messagebox.showerror(title='警告',message='网络未连接')
     elif sta == 'login fail':
             tk.messagebox.showerror(message='密码错误')
 
@@ -72,21 +72,27 @@ def usr_log_in():
             mailusr.getmails()
             num=mailusr.getmailnum()
             for i in range(0,num):
-                send=mailusr.mailsender(i)
-                clisock.sendfrom(usr_name,send)
-                rs=clisock.get_sender()
-                print(rs)
-                if rs=='1':
-                    mailusr.setlabel(i, False)
-                elif rs=='2':
-                    mailusr.setlabel(i,True)
-                elif rs=='3':
-                    test=mailusr.mailtext(i)
-                    clisock.sendmail(test)
-                    #label=classify(test)
-                    label=clisock.getresult()
-                    print('测试内容  ',test,  "结果  " ,label)
-                    mailusr.setlabel(i,label)
+                key=mailusr.getkey(i)
+
+                result=mailwrite.compare(usr_name,key)
+                if result==2:
+                    send=mailusr.mailsender(i)
+                    clisock.sendfrom(usr_name,send)
+                    rs=clisock.get_sender()
+                    #print(rs)
+                    if rs=='1':
+                        mailusr.setlabel(i, False)
+                    elif rs=='2':
+                        mailusr.setlabel(i,True)
+                    elif rs=='3':
+                        test=mailusr.mailtext(i)
+                        clisock.sendmail(test)
+                        #label=classify(test)
+                        label=clisock.getresult()
+                        print('测试内容  ',test,  "结果  " ,label)
+                        mailusr.setlabel(i,label)
+                else:
+                    mailusr.setlabel(i, result)
 
 
 

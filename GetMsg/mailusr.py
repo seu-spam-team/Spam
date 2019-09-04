@@ -5,16 +5,17 @@ from email.header import decode_header
 from email.utils import parseaddr
 
 class Mail:
-    def __init__(self,sen,ip,sub,tex):
+    def __init__(self,sen,sub,tex):
         self.send=sen
-        self.senderIP=ip
+        self.senderIP=None
         self.subject=sub
         self.text=tex
         self.ifnormal=None
         self.pre_list=[]
 
-    def out(self):
-        print(self.send+"..."+self.senderIP+'....'+self.subject+"..."+self.text)
+    def getmail(self):
+        text=self.text[0:10]
+        return self.subject+" "+text
 
     def get_text(self):
         return self.text
@@ -34,6 +35,10 @@ class Mail:
         return self.pre_list
     def get_test(self):
         return self.subject+' '+self.text
+    def getmailinfo(self):
+        str = 'sender: ' + self.send + 'subject:' + self.subject + '\n' + 'text:' + self.text
+        return str
+
 
 def decode_str(s):
     value, charset = decode_header(s)[0]
@@ -132,6 +137,16 @@ class MailUser:
                     content = content.decode(charset)
             return content
 
+    def get_html(self, msg):
+            content = ''
+            content_type = msg.get_content_type()
+            # print('content_type:',content_type)
+            if content_type == 'text/html':  # or
+                content = msg.get_payload(decode=True)
+                charset = guess_charset(msg)
+                if charset:
+                    content = content.decode(charset)
+            return content
 
     def parsemsg(self, msg):
             pre=[]
@@ -158,7 +173,7 @@ class MailUser:
                 else:
                     value=''
                 pre.append(value)
-            print(pre)
+            #print(pre)
 
             if msg is None:
                 return None
@@ -167,7 +182,13 @@ class MailUser:
                     text = self.get_content(part)
                     #print("emailcontent:" + text)
                     break
-            mail = Mail(sender, ip,sub, text)
+            # for part in msg.walk():
+            #     if not part.is_multipart():
+            #         html = self.get_html(part)
+            #         print(html)
+            #         if html !='':
+            #           break
+            mail = Mail(sender, sub, text)
             #mail.out()
             return mail
 
@@ -177,7 +198,7 @@ class MailUser:
         resp, mails, octets = self.server.list()
         currentnumber = len(mails)
         while True:
-            time.sleep(10)
+            time.sleep(5)
             self.server.quit()
             self.server = poplib.POP3(self.pop3_server)
             self.server.set_debuglevel(1)
@@ -247,7 +268,7 @@ class MailUser:
               send = mail.get_sender()
               sub = mail.get_sub()
               text = mail.get_text()
-              str = 'sender: ' + send + 'subject: ' + sub + '\n' + 'text: '+text
+              str = 'sender: ' + send + 'subject:' + sub + '\n' + 'text:'+text
               list.append(str)
         return list
 
@@ -260,7 +281,7 @@ class MailUser:
               send = mail.get_sender()
               sub = mail.get_sub()
               text=mail.get_text()
-              str = 'sender: ' + send + 'subject: ' + sub+'\n'+ 'text:'+text
+              str = 'sender: ' + send + 'subject:' + sub+'\n'+ 'text:'+text
               list.append(str)
         return list
 
@@ -269,10 +290,42 @@ class MailUser:
          self.maillist[num].set_normal(label)
 
 
+    def getname(self):
+        return self.user
+    def getpwd(self):
+        return self.password
 
 
     def quit(self):
         self.server.quit()
+
+    def mailnum(self,str):
+        l=len(self.maillist)
+        num=None
+        for i in range(0,l):
+            mailinfo=self.maillist[i].getmailinfo()
+            if str==mailinfo:
+                num=i
+                break
+        print(num)
+        return num
+
+
+    def getkey(self,i):
+        return self.maillist[i].getmail()
+
+
+
+    def maildic(self):
+        l = len(self.maillist)
+        maildic={}
+        for i in range(0, l):
+            text=self.maillist[i].getmail()
+            label=self.maillist[i].get_label()
+            dic={text:label}
+            maildic.update(dic)
+        return maildic
+
 
 
 

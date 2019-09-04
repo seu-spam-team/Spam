@@ -14,7 +14,7 @@ class ServerDaemon:
 
 	def __init__(self):
 		print('Server started.')
-		HOST = '10.203.194.161'
+		HOST = '10.203.245.146'
 		PORT = 8080
 		ADDR = (HOST,PORT)
 		Database.create()
@@ -89,12 +89,18 @@ class ServerThread(threading.Thread):
 						self.cliSockfd.send(bytes('2', encoding='utf-8'))
 					else:
 						self.cliSockfd.send(bytes('3', encoding='utf-8'))
-				elif msg=='h':
+				elif msg[0]=='h':#删除白名单
 					msg=msg[1:]
 					user = msg.split(' ')[0]
 					listname = msg.split(' ')[1]
-                    
-
+					print(user,listname)
+					Database.delete_white(user,listname)
+				elif msg[0]=='i':#删除黑名单
+					msg = msg[1:]
+					user = msg.split(' ')[0]
+					listname = msg.split(' ')[1]
+					print(user, listname)
+					Database.delete_black(user, listname)
 				else:
 					print('无意义')
 		except:
