@@ -8,6 +8,7 @@ from function.SendMail import UI_SendMail
 import mainwindow
 import re
 import mailwrite
+from PyQt5.Qt import *
 import sys
 class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def __init__(self,mailusr,clisock):
@@ -109,6 +110,9 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         return self.whitelist.text()
 
     def clickmoveto(self):
+        selectedItems = self.mailList.selectedItems()
+        if len(selectedItems) == 0:
+            return
         act=self.moveto.text()
         n=self.locateEachMail()
         text = self.mailList.item(n).text()
@@ -135,6 +139,19 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.logout.setIcon(qtawesome.icon("fa5s.sign-out-alt", color="black"))
         self.userlabel.setFont(qtawesome.font("fa5s", 50))
         self.userlabel.setText(chr(0xf007))
+        self.setButtonCursor()
+
+    def setButtonCursor(self):
+        self.logout.setCursor(Qt.PointingHandCursor)
+        self.normal.setCursor(Qt.PointingHandCursor)
+        self.sendmail.setCursor(Qt.PointingHandCursor)
+        self.trash.setCursor(Qt.PointingHandCursor)
+        self.checkblacklist.setCursor(Qt.PointingHandCursor)
+        self.checkwhitelist.setCursor(Qt.PointingHandCursor)
+        self.blackconfirm.setCursor(Qt.PointingHandCursor)
+        self.whiteconfirm.setCursor(Qt.PointingHandCursor)
+        self.moveto.setCursor(Qt.PointingHandCursor)
+        self.checkmail.setCursor(Qt.PointingHandCursor)
 
 
     def connectButtons(self):

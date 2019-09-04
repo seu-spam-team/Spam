@@ -13,8 +13,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_SendMail(object):
     def setupUi(self, SendMail):
         SendMail.setObjectName("SendMail")
-        SendMail.resize(815, 553)
         SendMail.setWindowModality(QtCore.Qt.ApplicationModal)
+        SendMail.resize(815, 553)
         self.verticalLayout = QtWidgets.QVBoxLayout(SendMail)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -64,11 +64,6 @@ class Ui_SendMail(object):
         self.closewindow.setMaximumSize(QtCore.QSize(100, 28))
         self.closewindow.setObjectName("closewindow")
         self.horizontalLayout_4.addWidget(self.closewindow)
-        self.saveAsDraft = QtWidgets.QPushButton(SendMail)
-        self.saveAsDraft.setMinimumSize(QtCore.QSize(100, 28))
-        self.saveAsDraft.setMaximumSize(QtCore.QSize(100, 28))
-        self.saveAsDraft.setObjectName("saveAsDraft")
-        self.horizontalLayout_4.addWidget(self.saveAsDraft)
         self.sendButton = QtWidgets.QPushButton(SendMail)
         self.sendButton.setMinimumSize(QtCore.QSize(100, 28))
         self.sendButton.setMaximumSize(QtCore.QSize(100, 28))
@@ -86,5 +81,4 @@ class Ui_SendMail(object):
         self.label.setText(_translate("SendMail", "主题"))
         self.label_3.setText(_translate("SendMail", "正文"))
         self.closewindow.setText(_translate("SendMail", "关闭"))
-        self.saveAsDraft.setText(_translate("SendMail", "存草稿"))
         self.sendButton.setText(_translate("SendMail", "发送"))

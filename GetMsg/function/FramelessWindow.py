@@ -1,5 +1,6 @@
 import sys
 
+import qtawesome
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication
@@ -24,9 +25,25 @@ class FramelessWindow(QWidget):
         self.mainwindow = UI_MainWindow(mailusr, clisock)
         layout.addWidget(self.titlebar)
         self.setWidget(self.mainwindow)
+        self.connectButtons()
+        self.titlebar.windowMoved.connect(self.move)
 
     def connectButtons(self):
-        self.titlebar.minimum.clicked.connect()
+        self.titlebar.closewidget.clicked.connect(self.close)
+        self.titlebar.minimum.clicked.connect(self.showMinimized)
+        self.titlebar.maximum.clicked.connect(self.windowMaximum)
+
+    def windowMaximum(self):
+        self.showMaximized()
+        self.titlebar.maximum.setIcon(qtawesome.icon("fa5.window-restore", color="black"))
+        self.titlebar.maximum.clicked.disconnect(self.windowMaximum)
+        self.titlebar.maximum.clicked.connect(self.windowRestore)
+
+    def windowRestore(self):
+        self.showNormal()
+        self.titlebar.maximum.setIcon(qtawesome.icon("fa5.window-maximize", color="black"))
+        self.titlebar.maximum.clicked.disconnect(self.windowRestore)
+        self.titlebar.maximum.clicked.connect(self.windowMaximum)
 
     def setWidget(self, widget):
         """设置自己的控件"""
