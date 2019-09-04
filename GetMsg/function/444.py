@@ -1,0 +1,2 @@
+maxOrNormal = True
+print(maxOrNormal)

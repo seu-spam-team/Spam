@@ -8,7 +8,11 @@ from titlebar import Ui_TitleBar
 
 class UI_TitleBar(QtWidgets.QWidget, Ui_TitleBar):
 
-    # 窗口移动
+    # 窗口最大化信号
+    windowMaximumed = pyqtSignal()
+    # 窗口还原信号
+    windowNormaled = pyqtSignal()
+    # 窗口移动信号
     windowMoved = pyqtSignal(QPoint)
 
     def __init__(self):
@@ -21,14 +25,21 @@ class UI_TitleBar(QtWidgets.QWidget, Ui_TitleBar):
         self.mPos = None
         # 设置默认背景颜色,否则由于受到父窗口的影响导致透明
         self.setAutoFillBackground(True)
-
+        self.maxOrNormal = True
 
     def enterEvent(self, event):
         super(UI_TitleBar, self).enterEvent(event)
+        self.setCursor(Qt.ArrowCursor)
 
     def mouseDoubleClickEvent(self, event):
-        super(UI_TitleBar, self).mouseDoubleClickEvent(event)
-        self.showMaximized()
+        # super(UI_TitleBar, self).mouseDoubleClickEvent(event) #这句没注释掉之前双击放大缩小窗口老是出bug！！！艹
+        self.showMaximizedOrNormal()
+
+    def showMaximizedOrNormal(self):
+        if self.maxOrNormal:
+            self.windowMaximumed.emit()
+        else:
+            self.windowNormaled.emit()
 
     def mousePressEvent(self, event):
         """鼠标点击事件"""
