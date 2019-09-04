@@ -2,22 +2,27 @@ import pickle
 
 
 
-def write(diclist):
-    mw = open("mails.pkl", 'wb')
+def write(usr,diclist):
+    str=usr+'.pkl'
+    mw = open(str, 'wb')
     str = pickle.dump(diclist,mw)
     mw.close()
 
 
-def read():
-    mr=open("mails.pkl",'rb')
+def read(usr):
+    str=usr+'.pkl'
+    mr=open(str,'rb')
     diclist=pickle.load(mr)
-    print(diclist)
+    #print(diclist)
     mr.close()
     return diclist
 
 
-def compare(mail):
-    dic=read()
+def compare(usr,mail):
+    try:
+      dic=read(usr)
+    except FileNotFoundError:
+      return 2
     t=dic.get(mail,2)
     print(t)
     return t

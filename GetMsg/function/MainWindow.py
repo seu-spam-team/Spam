@@ -25,11 +25,13 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
 
     def clickNormal(self): #查看收件箱
         self.mailList.clear()
+        self.moveto.setText("移至垃圾箱")
         normallist = self.mailusr.get_normalmail()
         self.mailList.addItems(normallist)
 
     def clickTrash(self): #查看垃圾箱
         self.mailList.clear()
+        self.moveto.setText("移至收件箱")
         trashlist = self.mailusr.get_badmail()
         self.mailList.addItems(trashlist)
 
@@ -47,9 +49,9 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.username.setText(str)
 
     def logOut(self):
+        usr = self.username.text()
         dict=self.mailusr.maildic()
-        mailwrite.write(dict)
-        mailwrite.read()
+        mailwrite.write(usr,dict)
         QCoreApplication.instance().quit()
 
 
@@ -102,6 +104,18 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def getWhiteList(self):
         return self.whitelist.text()
 
+    def clickmoveto(self):
+        act=self.moveto.text()
+        n=self.locateEachMail()
+        text = self.mailList.item(n).text()
+        mailnum=self.mailusr.mailnum(text)
+        if act=='移至垃圾箱':
+            self.mailusr.setlabel(mailnum,False)
+        if act=='移至收件箱':
+            self.mailusr.setlabel(mailnum, True)
+        self.mailList.removeItemWidget(self.mailList.takeItem(n))
+
+
     def connectButtons(self):
         self.sendmail.clicked.connect(self.sendMail)
         self.normal.clicked.connect(self.clickNormal)
@@ -112,6 +126,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.whiteconfirm.clicked.connect(self.clickWhiteConfirm)
         self.checkblacklist.clicked.connect(self.checkBlackList)
         self.checkwhitelist.clicked.connect(self.checkWhiteList)
+        self.moveto.clicked.connect(self.clickmoveto)
 
 
 if __name__ == "__main__":

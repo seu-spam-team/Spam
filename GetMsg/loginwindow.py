@@ -73,7 +73,8 @@ def usr_log_in():
             num=mailusr.getmailnum()
             for i in range(0,num):
                 key=mailusr.getkey(i)
-                result=mailwrite.compare(key)
+
+                result=mailwrite.compare(usr_name,key)
                 if result==2:
                     send=mailusr.mailsender(i)
                     clisock.sendfrom(usr_name,send)
