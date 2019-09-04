@@ -5,7 +5,7 @@ import blackwhitelist
 
 
 class UI_BlackWhiteList(QtWidgets.QWidget, blackwhitelist.Ui_BlackWhiteList):
-    def __init__(self,list):
+    def __init__(self,list, userName):
         super(UI_BlackWhiteList, self).__init__()
         self.setupUi(self)
         self.blackwhitelist.setSelectionMode(QAbstractItemView.ExtendedSelection)
