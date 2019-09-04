@@ -28,3 +28,4 @@ class UI_SendMail(QtWidgets.QWidget, sendmail.Ui_SendMail):
 
     def connectButtons(self):
         self.sendButton.clicked.connect(self.clickSend)
+        self.closewindow.clicked.connect(self.close)

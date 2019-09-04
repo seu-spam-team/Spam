@@ -5,11 +5,10 @@ import blackwhitelist
 
 
 class UI_BlackWhiteList(QtWidgets.QWidget, blackwhitelist.Ui_BlackWhiteList):
-<<<<<<< HEAD
-    def __init__(self,list, userName):
-=======
+
+
     def __init__(self,list,usr,clisock):
->>>>>>> 549365c79d8cc666402e6084361ca3f9ca132d0d
+
         super(UI_BlackWhiteList, self).__init__()
         self.setupUi(self)
         #self.blackwhitelist.setSelectionMode(QAbstractItemView.ExtendedSelection)
@@ -39,13 +38,13 @@ class UI_BlackWhiteList(QtWidgets.QWidget, blackwhitelist.Ui_BlackWhiteList):
                 elif windowtitle=='白名单':
                     self.clisock.deletewhite(usr, name)
                 self.blackwhitelist.removeItemWidget(self.blackwhitelist.takeItem(index.row()))
-<<<<<<< HEAD
+
         if len(selectedIndexs)>1:
             count = 0
             for index in selectedIndexs:
                 self.blackwhitelist.removeItemWidget(self.blackwhitelist.takeItem(index.row() - count))
                 count+=1
-=======
+
         # if len(selectedIndexs)>1:
         #     count = 0
         #     for index in selectedIndexs:
@@ -56,4 +55,3 @@ class UI_BlackWhiteList(QtWidgets.QWidget, blackwhitelist.Ui_BlackWhiteList):
         #             self.clisock.deletewhite(usr, name)
         #         self.blackwhitelist.removeItemWidget(self.blackwhitelist.takeItem(index.row()-count))
         #         count+=1
->>>>>>> 549365c79d8cc666402e6084361ca3f9ca132d0d

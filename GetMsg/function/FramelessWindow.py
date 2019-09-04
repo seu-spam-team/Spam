@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication
 
 from function.MainWindow import UI_MainWindow
-from function.UI_TitleBar import UI_TitleBar
+from function.TitleBar import UI_TitleBar
 
 Left, Top, Right, Bottom, LeftTop, RightTop, LeftBottom, RightBottom = range(8)
 
@@ -13,7 +13,7 @@ class FramelessWindow(QWidget):
 
     Margins = 5
 
-    def __init__(self):
+    def __init__(self, mailusr,clisock):
         super(FramelessWindow, self).__init__()
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -21,7 +21,9 @@ class FramelessWindow(QWidget):
         layout = QVBoxLayout(self, spacing=0)
         layout.setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
         self.titlebar = UI_TitleBar()
+        self.mainwindow = UI_MainWindow(mailusr, clisock)
         layout.addWidget(self.titlebar)
+        self.setWidget(self.mainwindow)
 
     def connectButtons(self):
         self.titlebar.minimum.clicked.connect()

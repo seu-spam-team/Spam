@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSignal, QPoint
 from PyQt5.QtWidgets import QWidget
 
-from titlebar.titlebar import Ui_TitleBar
+from titlebar import Ui_TitleBar
 
 
 class UI_TitleBar(QtWidgets.QWidget, Ui_TitleBar):

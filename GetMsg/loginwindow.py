@@ -14,6 +14,7 @@ import mainwindow
 from newthread import MyThread
 from function.MainWindow import *
 #窗口
+from Spam.GetMsg.function.FramelessWindow import FramelessWindow
 
 window=tk.Tk()
 window.title('欢迎使用九龙湖邮管队')
@@ -101,9 +102,9 @@ def usr_log_in():
             signal.sendMsg.connect(slot.get)
 
 
-            ui=UI_MainWindow(mailusr,clisock)
+            ui = FramelessWindow(mailusr, clisock)
 
-            ui.setUserName(usr_name)
+            ui.mainwindow.setUserName(usr_name)
             ui.show()
             newthread=MyThread(mailusr,signal,clisock)
             newthread.start()

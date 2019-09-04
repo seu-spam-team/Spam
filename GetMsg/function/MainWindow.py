@@ -1,5 +1,6 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QCoreApplication, QEventLoop
+import qtawesome
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtCore import QCoreApplication, QEventLoop, QSize
 
 from function.BlackWhiteList import UI_BlackWhiteList
 from function.CheckMail import UI_CheckMail
@@ -15,7 +16,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.connectButtons()
         self.mailusr = mailusr
         self.clisock = clisock
-        self.mPos = None
+        self.UI()
 
     def sendMail(self):
         sendmail = UI_SendMail(self.mailusr)
@@ -63,17 +64,20 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         return indexItems[0].row()
 
     def checkMail(self):  # 查看邮件(正常和垃圾)
-        num=self.locateEachMail()
+        selectedItems = self.mailList.selectedItems()
+        if len(selectedItems) == 0:
+            return
+        num = self.locateEachMail()
         t = self.mailList.item(num).text()
         print((t))
         self.mailusr.mailnum(t)
         sender = (re.findall(r"sender: (.+?)sub", t))
-        sender=(sender[0])
-        sub=(re.findall(r"subject:(.+?)\ntext", t,re.S))
-        sub=(sub[0])
-        text=re.findall(r"text:(.+.)", t)
-        text=(text[0])
-        checkwindow = UI_CheckMail(sender,sub,text)
+        sender = (sender[0])
+        sub = (re.findall(r"subject:(.+?)\ntext", t, re.S))
+        sub = (sub[0])
+        text = re.findall(r"text:(.+.)", t)
+        text = (text[0])
+        checkwindow = UI_CheckMail(sender, sub, text)
         checkwindow.show()
         qe = QEventLoop()
         qe.exec()
@@ -114,6 +118,23 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         if act=='移至收件箱':
             self.mailusr.setlabel(mailnum, True)
         self.mailList.removeItemWidget(self.mailList.takeItem(n))
+
+    def UI(self):
+        self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        self.normal.setIconSize(QSize(20,20))
+        self.normal.setIcon(qtawesome.icon("mdi.mailbox", color="black"))
+        self.sendmail.setIconSize(QSize(16,16))
+        self.sendmail.setIcon(qtawesome.icon("fa5s.pen", color="black"))
+        self.trash.setIcon(qtawesome.icon("fa5s.trash-alt", color="black"))
+        self.checkblacklist.setIcon(qtawesome.icon("fa5s.list-alt", color="black"))
+        self.checkwhitelist.setIcon(qtawesome.icon("fa.list-alt", color="black"))
+        self.blackconfirm.setIcon(qtawesome.icon("fa5s.plus", color="black"))
+        self.whiteconfirm.setIcon(qtawesome.icon("fa5s.plus", color="black"))
+        self.checkmail.setIcon(qtawesome.icon("fa.eye", color="black"))
+        self.moveto.setIcon(qtawesome.icon("fa5s.exchange-alt", color="black"))
+        self.logout.setIcon(qtawesome.icon("fa5s.sign-out-alt", color="black"))
+        self.userlabel.setFont(qtawesome.font("fa5s", 50))
+        self.userlabel.setText(chr(0xf007))
 
 
     def connectButtons(self):
