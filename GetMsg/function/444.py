@@ -1,2 +1,0 @@
-maxOrNormal = True
-print(maxOrNormal)

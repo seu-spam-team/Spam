@@ -3,7 +3,7 @@ import sys
 import qtawesome
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication, QDesktopWidget
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication
 
 from function.MainWindow import UI_MainWindow
 from function.TitleBar import UI_TitleBar
@@ -27,8 +27,6 @@ class FramelessWindow(QWidget):
         self.setWidget(self.mainwindow)
         self.connectButtons()
         self.titlebar.windowMoved.connect(self.move)
-        self.titlebar.windowNormaled.connect(self.windowRestore)
-        self.titlebar.windowMaximumed.connect(self.windowMaximum)
 
     def connectButtons(self):
         self.titlebar.closewidget.clicked.connect(self.close)
@@ -46,12 +44,6 @@ class FramelessWindow(QWidget):
         self.titlebar.maximum.setIcon(qtawesome.icon("fa5.window-maximize", color="black"))
         self.titlebar.maximum.clicked.disconnect(self.windowRestore)
         self.titlebar.maximum.clicked.connect(self.windowMaximum)
-
-    def showCenter(self):
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
 
     def setWidget(self, widget):
         """设置自己的控件"""
@@ -76,14 +68,12 @@ class FramelessWindow(QWidget):
         """最大化,要去除上下左右边界,如果不去除则边框地方会有空隙"""
         super(FramelessWindow, self).showMaximized()
         self.layout().setContentsMargins(0, 0, 0, 0)
-        self.titlebar.maxOrNormal = False
 
     def showNormal(self):
         """还原,要保留上下左右边界,否则没有边框无法调整"""
         super(FramelessWindow, self).showNormal()
-        self.showCenter()
-        self.layout().setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
-        self.titlebar.maxOrNormal = True
+        self.layout().setContentsMargins(
+            self.Margins, self.Margins, self.Margins, self.Margins)
 
     def eventFilter(self, obj, event):
         """事件过滤器,用于解决鼠标进入其它控件后还原为标准鼠标样式"""
