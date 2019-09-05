@@ -4,7 +4,7 @@
 from PyQt5.QtCore import QObject,pyqtSignal
 from PyQt5.QtWidgets import  QMessageBox
 from PyQt5 import QtWidgets
-
+from screen_tray import MainCode
 class SiganlObj(QObject):
      sendMsg=pyqtSignal(object) #定义信号
 
@@ -19,9 +19,14 @@ class TypeSlot(QObject):#定义槽对象
      def get(self,msg):#定义槽函数
          print(">>",msg)
          if msg=='正常':
-           QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信")
+           #QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信")
+           md = MainCode()
+           md.show()
          elif msg=='垃圾':
-           QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信,疑似为垃圾邮件")
+           #QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信,疑似为垃圾邮件")
+           md = MainCode('疑似垃圾邮件')
+           md.show()
+
 
 if __name__=='__main__':
     # send=SiganlObj()

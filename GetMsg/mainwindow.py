@@ -14,6 +14,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1001, 665)
+        #MainWindow.setWindowOpacity(0.5)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(MainWindow)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()

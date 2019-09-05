@@ -30,11 +30,12 @@ class SendMail:
         if '@163.com' in self.Sender:
             mail.connect("smtp.163.com")
         mail.login(self.Sender, self.Lisence)   # 账号和授权码
-        mail.sendmail(self.Sender, [self.Receivers], message.as_string())   # 发送账号、接收账号和邮件信息
-        if smtplib.SMTPException:
-            return True
-        else:
+        try:
+          mail.sendmail(self.Sender, [self.Receivers], message.as_string())   # 发送账号、接收账号和邮件信息
+        except smtplib.SMTPException:
             return False
+        return True
+
             
 if __name__ == "__main__":           
              mailTest =SendMail('879180233@qq.com','445396420@qq.com','test','idrbvinoknuhbdfj','hello')

@@ -14,30 +14,47 @@ import mainwindow
 from newthread import MyThread
 from function.MainWindow import *
 #窗口
-from Spam.GetMsg.function.FramelessWindow import FramelessWindow
+from function.FramelessWindow import FramelessWindow
+import os
+import os.path
+# 获取Windows平台临时文件夹
+path = os.getenv('temp')
+filename = os.path.join(path, 'info.txt')
 
 window=tk.Tk()
 window.title('欢迎使用九龙湖邮管队')
-window.geometry('450x300')
+window.geometry('720x400+500+200')
 window.resizable(0,0)
 #画布放置图片
-canvas=tk.Canvas(window,height=300,width=500)
-imagefile=tk.PhotoImage(file='1.png')
-image=canvas.create_image(-1,-30,anchor='nw',image=imagefile)
-canvas.pack(side='top')
+window.resizable(0,0)
+frmlt=tk.Frame(window,width=360,height=450,bg='black')
+frmlt.grid(row=0,column=0)
+canvas1=tk.Canvas(window,height=450,width=360)
+imagefile1=tk.PhotoImage(file='fina.png')
+image=canvas1.create_image(0,-20,anchor='nw',image=imagefile1)
+canvas1.grid(row=0,column=0)
+canvas2=tk.Canvas(window,height=450,width=360)
+imagefile2=tk.PhotoImage(file='3.png')
+image=canvas2.create_image(0,0,anchor='nw',image=imagefile2)
+canvas2.grid(row=0,column=1)
 window.wm_attributes('-topmost',1)
 #标签 用户名密码
-tk.Label(window,text='用户名:').place(x=100,y=150)
-tk.Label(window,text='密码:').place(x=100,y=190)
 #用户名输入框
-var_usr_name=tk.StringVar()
-entry_usr_name=tk.Entry(window,textvariable=var_usr_name)
-entry_usr_name.place(x=160,y=150)
+var_usr_name=tk.StringVar(window,value='')
+entry_usr_name=tk.Entry(window,textvariable=var_usr_name,bg='white')
+entry_usr_name.place(x=360,y=78)
 #密码输入框
-var_usr_pwd=tk.StringVar()
-entry_usr_pwd=tk.Entry(window,textvariable=var_usr_pwd,show='*')
-entry_usr_pwd.place(x=160,y=190)
-
+var_usr_pwd=tk.StringVar(window,value='')
+entry_usr_pwd=tk.Entry(window,textvariable=var_usr_pwd,show='*',bg='white')
+entry_usr_pwd.place(x=510,y=78)
+def pwd_reme():
+   if(var.get()==1):
+        with open(filename,'r') as fp:
+           n, p = fp.read().strip().split(',')
+           var_usr_name.set(n)
+           var_usr_pwd.set(p)
+   else:
+      pass     
 
 #登录函数
 def usr_log_in():
@@ -63,6 +80,8 @@ def usr_log_in():
     elif sta == 'login success':
 
             tk.messagebox.showinfo(title="欢迎",message="登录成功")
+            with open(filename, 'w') as fp:
+              fp.write(','.join((usr_name,usr_pwd)))
             window.destroy()
 
             app = mainwindow.QtWidgets.QApplication(sys.argv)
@@ -120,6 +139,9 @@ bt_login=tk.Button(window,text='登录',command=usr_log_in)
 bt_login.place(x=140,y=230)
 bt_logquit=tk.Button(window,text='退出',command=usr_sign_quit)
 bt_logquit.place(x=280,y=230)
+var=tk.IntVar()
+bt_reme =tk.Checkbutton(window,text='记录上次登录信息',variable=var,onvalue=1,offvalue=0,command=pwd_reme)
+bt_reme.place(x=360,y=105)
 #主循环
 window.mainloop()
 
