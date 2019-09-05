@@ -2,7 +2,7 @@ import socket
 import time
 import sys
 import json
-HOST = '10.203.219.120'
+HOST = '10.203.138.52'
 PORT = 8080
 BUFIZ = 1024
 ADDR = (HOST, PORT)

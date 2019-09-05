@@ -10,8 +10,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowOpacity(0.8)
 
 
-
-
         message = QLabel(MainWindow)
         message.setGeometry(QtCore.QRect(55, 85, 200, 100))
 

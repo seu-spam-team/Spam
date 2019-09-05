@@ -14,7 +14,7 @@ class ServerDaemon:
 
 	def __init__(self):
 		print('Server started.')
-		HOST = '10.203.219.120'
+		HOST = '10.203.138.52'
 		PORT = 8080
 		ADDR = (HOST,PORT)
 		Database.create()
@@ -84,10 +84,13 @@ class ServerThread(threading.Thread):
 					blacklist=Database.black_list(user)
 					whitelist=Database.white_list(user)
 					if sender in blacklist:
+						print(1)
 						self.cliSockfd.send(bytes('1', encoding='utf-8'))
 					elif sender in whitelist:
+						print(2)
 						self.cliSockfd.send(bytes('2', encoding='utf-8'))
 					else:
+						print(3)
 						self.cliSockfd.send(bytes('3', encoding='utf-8'))
 				elif msg[0]=='h':#删除白名单
 					msg=msg[1:]
@@ -104,7 +107,7 @@ class ServerThread(threading.Thread):
 				else:
 					print('无意义')
 		except:
-			#print('error')
+			print('error')
 			pass
 		finally:
 			self.cliSockfd.close()

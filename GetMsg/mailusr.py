@@ -78,13 +78,10 @@ class MailUser:
         except Exception as e:
             print(e)
             return"not connected"
-
          # 可以打开或关闭调试信息:
         self.server.set_debuglevel(0)
         # 可选:打印POP3服务器的欢迎文字:
          # print(self.server.getwelcome().decode('utf-8'))
-
-
         # 身份认证:
         self.server.user(usr)
 
@@ -211,7 +208,10 @@ class MailUser:
         # Use TLS
         imap.Ssl = True
         imap.Port = 993
-        success = imap.Connect("imap.163.com")
+        if '@163.com' in self.user:
+          success = imap.Connect("imap.163.com")
+        if '@qq.com' in self.user:
+            success = imap.Connect("imap.qq.com")
         if (success != True):
             print(imap.LastErrorText)
             sys.exit()
@@ -249,12 +249,26 @@ class MailUser:
                 # 可以根据邮件索引号直接从服务器删除邮件:
                 # server.dele(index)
                 mail = self.parsemsg(msg)
-                test = mail.get_test()
-                sock.sendmail(test)
-                label = sock.getresult()
-                mail.set_normal(label)
-                self.maillist.append(mail)
-                if label == True:
+                send = mail.get_sender()
+                sock.sendfrom(self.user, send)
+                rs = sock.get_sender()
+                print(rs)
+                if rs == '1':
+                    print(1)
+                    mail.set_normal(False)
+                    self.maillist.append(mail)
+                elif rs == '2':
+                    print(2)
+                    mail.set_normal(True)
+                    self.maillist.append(mail)
+                elif rs == '3':
+                    print(3)
+                    test = mail.get_test()
+                    sock.sendmail(test)
+                    label = sock.getresult()
+                    mail.set_normal(label)
+                    self.maillist.append(mail)
+                if mail.get_label()==True:
                     signal.run('正常')
                 else:
                     signal.run('垃圾')

@@ -73,9 +73,9 @@ def usr_log_in():
     mailusr=MailUser(usr_name,usr_pwd)
     sta = mailusr.login(usr_name,usr_pwd)
     if sta == "not connected":
-            tk.messagebox.showerror(title='警告',message='网络未连接')
+            tk.messagebox.showerror(title='警告',message='请检查账号格式或网络连接状态')
     elif sta == 'login fail':
-            tk.messagebox.showerror(message='密码错误')
+            tk.messagebox.showerror(message='账号或密码错误')
 
     elif sta == 'login success':
 
@@ -95,7 +95,7 @@ def usr_log_in():
                 key=mailusr.getkey(i)
 
                 result=mailwrite.compare(usr_name,key)
-                if result==2:
+                if result==2 or result==None:
                     send=mailusr.mailsender(i)
                     clisock.sendfrom(usr_name,send)
                     rs=clisock.get_sender()

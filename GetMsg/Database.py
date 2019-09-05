@@ -99,12 +99,13 @@ def black_list(usr):
         if row[0]==usr:
             list0.append(row[1])
 
-    print(list0)
+
     list1=set(list0)
     list2=list(list1)
+    print(list2)
    # print("Operation done successfully")
     conn.close()
-    if len(list2)==0:
+    if list2==[None] or len(list2)==0:
         return list2
     list3 = list2[0].split(',')
     list3 = list(set(list3))
@@ -127,7 +128,7 @@ def white_list(usr):
     print(list2)
     #print("Operation done successfully")
     conn.close()
-    if len(list2)==0:
+    if list2==[None]or len(list2)==0:
         return list2
     list3=list2[0].split(',')
     list3=list(set(list3))
@@ -157,8 +158,8 @@ def delete_white(usr_name,list_name):
 
 
 if __name__ == "__main__":
-    create()
-    delete_white('haonan_0204@163.com','whn<whn_946@163.com>')
+    list=[None]
+    print(len(list))
 
 
 '''
