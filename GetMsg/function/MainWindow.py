@@ -140,18 +140,23 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.userlabel.setFont(qtawesome.font("fa5s", 50))
         self.userlabel.setText(chr(0xf007))
         self.setButtonCursor()
+        self.mailList.setStyleSheet(
+            "QListWidget{background-color:whitesmoke;border:none;color:#696969;font:75 16pt 'Microsoft YaHei UI';font-size:16px;font-weight:bold;}"
+            'QListWidget::Item{padding-top:-2px; padding-bottom:-1px;}'
+            "QListWidget::Item:hover{background:silver;padding-top:0px; padding-bottom:0px; }"
+            "QListWidget::item:selected{background:lightgray; color:black; }")
 
     def setButtonCursor(self):
-        self.logout.setCursor(Qt.PointingHandCursor)
-        self.normal.setCursor(Qt.PointingHandCursor)
-        self.sendmail.setCursor(Qt.PointingHandCursor)
-        self.trash.setCursor(Qt.PointingHandCursor)
-        self.checkblacklist.setCursor(Qt.PointingHandCursor)
-        self.checkwhitelist.setCursor(Qt.PointingHandCursor)
-        self.blackconfirm.setCursor(Qt.PointingHandCursor)
-        self.whiteconfirm.setCursor(Qt.PointingHandCursor)
-        self.moveto.setCursor(Qt.PointingHandCursor)
-        self.checkmail.setCursor(Qt.PointingHandCursor)
+        self.logout.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.normal.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.sendmail.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.trash.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.checkblacklist.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.checkwhitelist.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.blackconfirm.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.whiteconfirm.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.moveto.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
+        self.checkmail.setCursor(QCursor(QPixmap('mid.png').scaled(25, 29)))
 
 
     def connectButtons(self):
