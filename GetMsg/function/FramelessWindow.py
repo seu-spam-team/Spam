@@ -1,9 +1,9 @@
 import sys
 
 import qtawesome
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication, QDesktopWidget
+from PyQt5.QtCore import *
+from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent, QIcon
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication, QDesktopWidget, QSystemTrayIcon, QAction, QMenu, QMessageBox
 
 from function.MainWindow import UI_MainWindow
 from function.TitleBar import UI_TitleBar
@@ -29,9 +29,50 @@ class FramelessWindow(QWidget):
         self.titlebar.windowMoved.connect(self.move)
         self.titlebar.windowNormaled.connect(self.windowRestore)
         self.titlebar.windowMaximumed.connect(self.windowMaximum)
+        self.systemTrayIconInitial()
+
+    def systemTrayIconInitial(self):
+        # 在系统托盘处显示图标
+        self.tray = QSystemTrayIcon(self)
+        self.tray.setIcon(QIcon('timg.jpg'))
+        self.tray.show()
+        # 设置系统托盘图标的菜单
+        # 设定显示和退出两个选项
+        self.op1 = QAction('&显示(Show)', triggered=self.show)
+        self.op2 = QAction('&退出(Exit)', triggered=self.quitApp)
+
+        # 创建菜单并添加选项
+        self.trayMenu = QMenu()
+        self.trayMenu.addAction(self.op1)
+        self.trayMenu.addAction(self.op2)
+        self.tray.setContextMenu(self.trayMenu)
+
+        # 设置后台运行时的提示信息
+        self.tray.showMessage('九龙湖邮管', '已在后台运行', icon=0)
+        # 鼠标双击点击或左键单击点击会唤出主界面
+        self.tray.activated.connect(self.act)
+
+        # 退出程序
+    def quitApp(self):
+        self.show()  # w.hide() #隐藏
+        re = QMessageBox.question(self, "提示", "退出系统", QMessageBox.Yes |
+                                      QMessageBox.No, QMessageBox.No)
+        if re == QMessageBox.Yes:
+            # 关闭窗体程序
+            QCoreApplication.instance().quit()
+            # 在应用程序全部关闭后，TrayIcon其实还不会自动消失，
+            # 直到你的鼠标移动到上面去后，才会消失，
+            # 这是个问题，（如同你terminate一些带TrayIcon的应用程序时出现的状况），
+            # 这种问题的解决我是通过在程序退出前将其setVisible(False)来完成的。
+            self.tray.setVisible(False)
+
+    def act(self, reason):
+        # 鼠标点击icon传递的信号会带有一个整形的值，1是表示单击右键，2是双击，3是单击左键，4是用鼠标中键点击
+        if reason == 2 or reason == 3:
+            self.show()
 
     def connectButtons(self):
-        self.titlebar.closewidget.clicked.connect(self.close)
+        self.titlebar.closewidget.clicked.connect(self.hide)
         self.titlebar.minimum.clicked.connect(self.showMinimized)
         self.titlebar.maximum.clicked.connect(self.windowMaximum)
 
