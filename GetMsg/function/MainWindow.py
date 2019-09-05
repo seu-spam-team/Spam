@@ -14,16 +14,11 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def __init__(self,mailusr,clisock):
         super(UI_MainWindow, self).__init__()
         self.setupUi(self)
+        self.hideCheckMailWidget()
         self.connectButtons()
         self.mailusr = mailusr
         self.clisock = clisock
         self.UI()
-
-
-
-
-
-
 
     def sendMail(self):
         sendmail = UI_SendMail(self.mailusr)
@@ -84,10 +79,17 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         sub = (sub[0])
         text = re.findall(r"text:(.+.)", t)
         text = (text[0])
-        checkwindow = UI_CheckMail(sender, sub, text)
-        checkwindow.show()
-        qe = QEventLoop()
-        qe.exec()
+        self.displayMail(sender, sub, text)
+        self.showCheckMailWidget()
+        # checkwindow = UI_CheckMail(sender, sub, text)
+        # checkwindow.show()
+        # qe = QEventLoop()
+        # qe.exec()
+
+    def displayMail(self,senderStr, subStr, contentStr):
+        self.senderName.setText(senderStr)
+        self.title.setText(subStr)
+        self.content.setText(contentStr)
 
     def checkBlackList(self):
         usr=self.username.text()
@@ -176,6 +178,20 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.checkblacklist.clicked.connect(self.checkBlackList)
         self.checkwhitelist.clicked.connect(self.checkWhiteList)
         self.moveto.clicked.connect(self.clickmoveto)
+
+    def hideCheckMailWidget(self):
+        self.title.hide()
+        self.senderName.hide()
+        self.content.hide()
+        self.titlelabel.hide()
+        self.senderlabel.hide()
+
+    def showCheckMailWidget(self):
+        self.title.show()
+        self.senderName.show()
+        self.content.show()
+        self.titlelabel.show()
+        self.senderlabel.show()
 
 
 if __name__ == "__main__":

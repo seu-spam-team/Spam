@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QAbstractItemView
 
 import blackwhitelist
@@ -11,11 +12,13 @@ class UI_BlackWhiteList(QtWidgets.QWidget, blackwhitelist.Ui_BlackWhiteList):
 
         super(UI_BlackWhiteList, self).__init__()
         self.setupUi(self)
+        # self.setWindowFlags(Qt.FramelessWindowHint)
         #self.blackwhitelist.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.testAdd(list)
         self.deletebutton.clicked.connect(self.deleteBlackWhiteListItem)
         self.usr=usr
         self.clisock=clisock
+
     def testAdd(self,list):
         # blacklist = ["black list1", "black list2", "black list3", "black list4", "black list5", "black list6", "black list7"]
         self.blackwhitelist.addItems(list)

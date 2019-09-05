@@ -3,11 +3,11 @@ import checkmail
 
 
 class UI_CheckMail(QtWidgets.QWidget, checkmail.Ui_CheckMail):
-    def __init__(self, senderStr, subStr, contentStr):
+    def __init__(self):
         super(UI_CheckMail, self).__init__()
         self.setupUi(self)
-        self.closebutton.clicked.connect(self.close)
-        self.displayMail(senderStr, subStr, contentStr)
+        # self.closebutton.clicked.connect(self.close)
+        # self.displayMail(senderStr, subStr, contentStr)
 
     def displayMail(self,senderStr, subStr, contentStr):
         self.senderName.setText(senderStr)

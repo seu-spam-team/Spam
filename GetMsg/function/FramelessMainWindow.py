@@ -10,12 +10,12 @@ from function.TitleBar import UI_TitleBar
 
 Left, Top, Right, Bottom, LeftTop, RightTop, LeftBottom, RightBottom = range(8)
 
-class FramelessWindow(QWidget):
+class FramelessMainWindow(QWidget):
 
     Margins = 5
 
     def __init__(self, mailusr,clisock):
-        super(FramelessWindow, self).__init__()
+        super(FramelessMainWindow, self).__init__()
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setMouseTracking(True)
@@ -111,17 +111,17 @@ class FramelessWindow(QWidget):
         if self.windowState() == Qt.WindowMaximized or self.windowState() == Qt.WindowFullScreen:
             # 最大化或者全屏则不允许移动
             return
-        super(FramelessWindow, self).move(pos)
+        super(FramelessMainWindow, self).move(pos)
 
     def showMaximized(self):
         """最大化,要去除上下左右边界,如果不去除则边框地方会有空隙"""
-        super(FramelessWindow, self).showMaximized()
+        super(FramelessMainWindow, self).showMaximized()
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.titlebar.maxOrNormal = False
 
     def showNormal(self):
         """还原,要保留上下左右边界,否则没有边框无法调整"""
-        super(FramelessWindow, self).showNormal()
+        super(FramelessMainWindow, self).showNormal()
         self.showCenter()
         self.layout().setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
         self.titlebar.maxOrNormal = True
@@ -130,31 +130,31 @@ class FramelessWindow(QWidget):
         """事件过滤器,用于解决鼠标进入其它控件后还原为标准鼠标样式"""
         if isinstance(event, QEnterEvent):
             self.setCursor(Qt.ArrowCursor)
-        return super(FramelessWindow, self).eventFilter(obj, event)
+        return super(FramelessMainWindow, self).eventFilter(obj, event)
 
     def paintEvent(self, event):
         """由于是全透明背景窗口,重绘事件中绘制透明度为1的难以发现的边框,用于调整窗口大小"""
-        super(FramelessWindow, self).paintEvent(event)
+        super(FramelessMainWindow, self).paintEvent(event)
         painter = QPainter(self)
         painter.setPen(QPen(QColor(255, 255, 255, 1), 2 * self.Margins))
         painter.drawRect(self.rect())
 
     def mousePressEvent(self, event):
         """鼠标点击事件"""
-        super(FramelessWindow, self).mousePressEvent(event)
+        super(FramelessMainWindow, self).mousePressEvent(event)
         if event.button() == Qt.LeftButton:
             self._mpos = event.pos()
             self._pressed = True
 
     def mouseReleaseEvent(self, event):
         '''鼠标弹起事件'''
-        super(FramelessWindow, self).mouseReleaseEvent(event)
+        super(FramelessMainWindow, self).mouseReleaseEvent(event)
         self._pressed = False
         self.Direction = None
 
     def mouseMoveEvent(self, event):
         """鼠标移动事件"""
-        super(FramelessWindow, self).mouseMoveEvent(event)
+        super(FramelessMainWindow, self).mouseMoveEvent(event)
         pos = event.pos()
         xPos, yPos = pos.x(), pos.y()
         wm, hm = self.width() - self.Margins, self.height() - self.Margins
@@ -264,7 +264,7 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     # app.setStyleSheet(StyleSheet)
-    mainWnd = FramelessWindow()
+    mainWnd = FramelessMainWindow()
     # mainWnd.setWindowTitle('测试标题栏')
     # mainWnd.setWindowIcon(QIcon('Qt.ico'))
     mainWnd.resize(QSize(1250,780))
