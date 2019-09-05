@@ -125,6 +125,7 @@ def usr_log_in():
 
             ui.mainwindow.setUserName(usr_name)
             ui.show()
+            ui.showCenter()
             newthread=MyThread(mailusr,signal,clisock)
             newthread.start()
             sys.exit(app.exec_())
