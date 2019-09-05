@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         message.setStyleSheet("QComboBox{color:rgb(30,144,255)}")
 
 
-        message.setText('收到一封邮件\n'+strl)
+        message.setText('收到新来信\n'+strl)
 
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

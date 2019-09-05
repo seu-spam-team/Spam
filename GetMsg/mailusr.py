@@ -3,7 +3,8 @@ import time
 from email.parser import Parser
 from email.header import decode_header
 from email.utils import parseaddr
-
+import sys
+import chilkat2
 class Mail:
     def __init__(self,sen,sub,tex):
         self.send=sen
@@ -195,19 +196,49 @@ class MailUser:
 
 
     def checknew(self,signal,sock):
-        resp, mails, octets = self.server.list()
-        currentnumber = len(mails)
+        glob = chilkat2.Global()
+        success = glob.UnlockBundle("Anything for 30-day trial")
+
+        status = glob.UnlockStatus
+
+        # The LastErrorText can be examined in the success case to see if it was unlocked in
+        # trial more, or with a purchased unlock code.
+
+        # This example assumes the Chilkat API to have been previously unlocked.
+        # See Global Unlock Sample for sample code.
+        imap = chilkat2.Imap()
+        # Connect to an IMAP server.
+        # Use TLS
+        imap.Ssl = True
+        imap.Port = 993
+        success = imap.Connect("imap.163.com")
+        if (success != True):
+            print(imap.LastErrorText)
+            sys.exit()
+        # Login
+        success = imap.Login(self.user, self.password)
+        if (success != True):
+            print(imap.LastErrorText)
+            sys.exit()
+            # Select an IMAP mailbox
+        success = imap.SelectMailbox("Inbox")
+        if (success != True):
+            print(imap.LastErrorText)
+            sys.exit()
+        currentnumber = imap.NumMessages
         while True:
-            time.sleep(5)
-            self.server.quit()
-            self.server = poplib.POP3(self.pop3_server)
-            self.server.set_debuglevel(1)
-            self.server.user(self.user)
-            self.server.pass_(self.password)
-            self.server.stat()
-            resp, mails, octets = self.server.list()
-            newnum = len(mails)
-            if (currentnumber < newnum):
+            time.sleep(1)
+            success = imap.SelectMailbox("Inbox")
+            if (success != True):
+                print(imap.LastErrorText)
+                sys.exit()
+            newnum = imap.NumMessages
+            if(newnum>currentnumber):
+                self.server.quit()
+                self.server = poplib.POP3(self.pop3_server)
+                self.server.set_debuglevel(0)
+                self.server.user(self.user)
+                self.server.pass_(self.password)
                 index = newnum
                 resp, lines, octets = self.server.retr(index)
                 # lines存储了邮件的原始文本的每一行,
@@ -217,17 +248,18 @@ class MailUser:
                 msg = Parser().parsestr(msg_content)
                 # 可以根据邮件索引号直接从服务器删除邮件:
                 # server.dele(index)
-                mail=self.parsemsg(msg)
-                test=mail.get_test()
+                mail = self.parsemsg(msg)
+                test = mail.get_test()
                 sock.sendmail(test)
                 label = sock.getresult()
                 mail.set_normal(label)
                 self.maillist.append(mail)
-                if label==True:
-                  signal.run('正常')
+                if label == True:
+                    signal.run('正常')
                 else:
-                  signal.run('垃圾')
-            currentnumber = newnum
+                    signal.run('垃圾')
+            currentnumber=newnum
+
 
     #得到邮件数量
     def getmailnum(self):

@@ -20,7 +20,7 @@ class TypeSlot(QObject):#定义槽对象
          print(">>",msg)
          if msg=='正常':
            #QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信")
-           md = MainCode()
+           md = MainCode('')
            md.show()
          elif msg=='垃圾':
            #QMessageBox.information(QtWidgets.QWidget(), "提醒", "收到一封新来信,疑似为垃圾邮件")
