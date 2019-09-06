@@ -14,7 +14,7 @@ class MainCode(QMainWindow,sliding_window.Ui_MainWindow):
         QMainWindow.__init__(self)
         sliding_window.Ui_MainWindow.__init__(self)
         self.setupUi(self,strl=str)
-        self.setWindowFlags(Qt.FramelessWindowHint|Qt.Tool)
+        self.setWindowFlags(Qt.FramelessWindowHint|Qt.Tool|Qt.WindowStaysOnTopHint)
         #self.setAttribute(Qt.WA_TranslucentBackground)
         #|Qt.Tool
 
