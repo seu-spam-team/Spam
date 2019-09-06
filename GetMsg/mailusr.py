@@ -37,7 +37,7 @@ class Mail:
     def get_test(self):
         return self.subject+' '+self.text
     def getmailinfo(self):
-        str = 'sender: ' + self.send + 'subject:' + self.subject + '\n' + 'text:' + self.text
+        str = '发件人：' + self.send + '\n' + '主题：' +self.subject + '\n' + '正文：' + self.text
         return str
 
 
@@ -314,7 +314,7 @@ class MailUser:
               send = mail.get_sender()
               sub = mail.get_sub()
               text = mail.get_text()
-              str = 'sender: ' + send + 'subject:' + sub + '\n' + 'text:'+text
+              str = '发件人：' + send +'\n' +'主题：'+ sub + '\n' +'正文：'+text
               list.append(str)
         return list
 
@@ -327,7 +327,7 @@ class MailUser:
               send = mail.get_sender()
               sub = mail.get_sub()
               text=mail.get_text()
-              str = 'sender: ' + send + 'subject:' + sub+'\n'+ 'text:'+text
+              str = '发件人：' + send + '\n' + '主题：' + sub + '\n' + '正文：' + text
               list.append(str)
         return list
 
