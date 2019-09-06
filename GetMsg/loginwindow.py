@@ -89,11 +89,11 @@ def usr_log_in():
                 key=mailusr.getkey(i)
 
                 result=mailwrite.compare(usr_name,key)
-                if result==2:
+                if result==2 or result==None:
                     send=mailusr.mailsender(i)
                     clisock.sendfrom(usr_name,send)
                     rs=clisock.get_sender()
-                    #print(rs)
+                    print(rs)
                     if rs=='1':
                         mailusr.setlabel(i, False)
                     elif rs=='2':
@@ -108,14 +108,15 @@ def usr_log_in():
                 else:
                     mailusr.setlabel(i, result)
 
+            ui = FramelessMainWindow(mailusr, clisock)
+
 
 
             signal = SiganlObj()
-            slot = TypeSlot()
+            slot = TypeSlot(ui,mailusr)
             signal.sendMsg.connect(slot.get)
 
 
-            ui = FramelessMainWindow(mailusr, clisock)
 
             ui.mainwindow.setUserName(usr_name)
             ui.show()

@@ -234,6 +234,7 @@ class MailUser:
                 sys.exit()
             newnum = imap.NumMessages
             if(newnum>currentnumber):
+                imap.Disconnect()
                 self.server.quit()
                 self.server = poplib.POP3(self.pop3_server)
                 self.server.set_debuglevel(0)
@@ -272,6 +273,18 @@ class MailUser:
                     signal.run('正常')
                 else:
                     signal.run('垃圾')
+                if '@163.com' in self.user:
+                    success = imap.Connect("imap.163.com")
+                if '@qq.com' in self.user:
+                    success = imap.Connect("imap.qq.com")
+                if (success != True):
+                    print(imap.LastErrorText)
+                    sys.exit()
+                # Login
+                success = imap.Login(self.user, self.password)
+                if (success != True):
+                    print(imap.LastErrorText)
+                    sys.exit()
             currentnumber=newnum
 
 
@@ -359,6 +372,10 @@ class MailUser:
 
     def getkey(self,i):
         return self.maillist[i].getmail()
+
+
+    def rtmail(self,num):
+        return self.maillist[num-1]
 
 
 

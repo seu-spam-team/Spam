@@ -265,6 +265,9 @@ class FramelessMainWindow(QWidget):
                 return
         self.setGeometry(x, y, w, h)
 
+    def getmainwindow(self):
+        return self.mainwindow
+
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)
