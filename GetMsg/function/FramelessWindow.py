@@ -1,8 +1,9 @@
 import sys
 
 import qtawesome
+from PyQt5 import QtCore
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent, QIcon
+from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent, QIcon, QBrush, QPixmap
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication, QDesktopWidget, QSystemTrayIcon, QAction, QMenu, QMessageBox
 
 from function.MainWindow import UI_MainWindow
@@ -10,21 +11,23 @@ from function.TitleBar import UI_TitleBar
 
 Left, Top, Right, Bottom, LeftTop, RightTop, LeftBottom, RightBottom = range(8)
 
-class FramelessMainWindow(QWidget):
+class FramelessWindow(QWidget):
 
     Margins = 5
 
     def __init__(self, mailusr,clisock):
-        super(FramelessMainWindow, self).__init__()
-        self.setAttribute(Qt.WA_TranslucentBackground, True)
+        super(FramelessWindow, self).__init__()
+        # self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setMouseTracking(True)
         layout = QVBoxLayout(self, spacing=0)
         layout.setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
         self.titlebar = UI_TitleBar()
         self.mainwindow = UI_MainWindow(mailusr, clisock)
+        # self.mainwindow.install
         layout.addWidget(self.titlebar)
         self.setWidget(self.mainwindow)
+        self.setBackgroundPicture()
         self.connectButtons()
         self.titlebar.windowMoved.connect(self.move)
         self.titlebar.windowNormaled.connect(self.windowRestore)
@@ -94,34 +97,40 @@ class FramelessMainWindow(QWidget):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
+    def setBackgroundPicture(self):
+        palette = self.palette()
+        palette.setBrush(self.backgroundRole(), QBrush(QPixmap("background.jpg")))
+        self.setPalette(palette)
+
     def setWidget(self, widget):
         """设置自己的控件"""
         if hasattr(self, '_widget'):
             return
-        self._widget = widget
+        # self._widget = widget
         # 设置默认背景颜色,否则由于受到父窗口的影响导致透明
-        self._widget.setAutoFillBackground(True)
-        palette = self._widget.palette()
-        palette.setColor(palette.Window, QColor(240, 240, 240))
-        self._widget.setPalette(palette)
-        self._widget.installEventFilter(self)
-        self.layout().addWidget(self._widget)
+        # self._widget.setAutoFillBackground(True)
+        # palette = self._widget.palette()
+        # palette.setColor(palette.Window, QColor(240, 240, 240))
+        # self._widget.setPalette(palette)
+        # self._widget.installEventFilter(self)
+        widget.installEventFilter(self)
+        self.layout().addWidget(widget)
 
     def move(self, pos):
         if self.windowState() == Qt.WindowMaximized or self.windowState() == Qt.WindowFullScreen:
             # 最大化或者全屏则不允许移动
             return
-        super(FramelessMainWindow, self).move(pos)
+        super(FramelessWindow, self).move(pos)
 
     def showMaximized(self):
         """最大化,要去除上下左右边界,如果不去除则边框地方会有空隙"""
-        super(FramelessMainWindow, self).showMaximized()
+        super(FramelessWindow, self).showMaximized()
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.titlebar.maxOrNormal = False
 
     def showNormal(self):
         """还原,要保留上下左右边界,否则没有边框无法调整"""
-        super(FramelessMainWindow, self).showNormal()
+        super(FramelessWindow, self).showNormal()
         self.showCenter()
         self.layout().setContentsMargins(self.Margins, self.Margins, self.Margins, self.Margins)
         self.titlebar.maxOrNormal = True
@@ -130,31 +139,32 @@ class FramelessMainWindow(QWidget):
         """事件过滤器,用于解决鼠标进入其它控件后还原为标准鼠标样式"""
         if isinstance(event, QEnterEvent):
             self.setCursor(Qt.ArrowCursor)
-        return super(FramelessMainWindow, self).eventFilter(obj, event)
+            return True
+        return super(FramelessWindow, self).eventFilter(obj, event)
 
     def paintEvent(self, event):
         """由于是全透明背景窗口,重绘事件中绘制透明度为1的难以发现的边框,用于调整窗口大小"""
-        super(FramelessMainWindow, self).paintEvent(event)
+        super(FramelessWindow, self).paintEvent(event)
         painter = QPainter(self)
         painter.setPen(QPen(QColor(255, 255, 255, 1), 2 * self.Margins))
         painter.drawRect(self.rect())
 
     def mousePressEvent(self, event):
         """鼠标点击事件"""
-        super(FramelessMainWindow, self).mousePressEvent(event)
+        super(FramelessWindow, self).mousePressEvent(event)
         if event.button() == Qt.LeftButton:
             self._mpos = event.pos()
             self._pressed = True
 
     def mouseReleaseEvent(self, event):
         '''鼠标弹起事件'''
-        super(FramelessMainWindow, self).mouseReleaseEvent(event)
+        super(FramelessWindow, self).mouseReleaseEvent(event)
         self._pressed = False
         self.Direction = None
 
     def mouseMoveEvent(self, event):
         """鼠标移动事件"""
-        super(FramelessMainWindow, self).mouseMoveEvent(event)
+        super(FramelessWindow, self).mouseMoveEvent(event)
         pos = event.pos()
         xPos, yPos = pos.x(), pos.y()
         wm, hm = self.width() - self.Margins, self.height() - self.Margins
@@ -264,7 +274,7 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     # app.setStyleSheet(StyleSheet)
-    mainWnd = FramelessMainWindow()
+    mainWnd = FramelessWindow()
     # mainWnd.setWindowTitle('测试标题栏')
     # mainWnd.setWindowIcon(QIcon('Qt.ico'))
     mainWnd.resize(QSize(1250,780))

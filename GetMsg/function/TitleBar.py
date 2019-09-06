@@ -1,6 +1,7 @@
 import qtawesome
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSignal, QPoint, Qt
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QWidget
 
 from titlebar import Ui_TitleBar
@@ -22,9 +23,13 @@ class UI_TitleBar(QtWidgets.QWidget, Ui_TitleBar):
         self.minimum.setIcon(qtawesome.icon("fa5.window-minimize", color="black"))
         self.closewidget.setIcon(qtawesome.icon("fa5.window-close", color="black"))
         self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setTransparency()
         self.mPos = None
         # 设置默认背景颜色,否则由于受到父窗口的影响导致透明
-        self.setAutoFillBackground(True)
+        # self.setAutoFillBackground(True)
+        # palette = self.palette()
+        # palette.setColor(palette.Window, QColor(85, 170, 255))
+        # self.setPalette(palette)
         self.maxOrNormal = True
 
     def enterEvent(self, event):
@@ -32,7 +37,7 @@ class UI_TitleBar(QtWidgets.QWidget, Ui_TitleBar):
         self.setCursor(Qt.ArrowCursor)
 
     def mouseDoubleClickEvent(self, event):
-        # super(UI_TitleBar, self).mouseDoubleClickEvent(event) #这句没注释掉之前双击放大缩小窗口老是出bug！！！艹
+        # super(UI_TitleBar, self).mouseDoubleClickEvent(event) #这句没注释掉之前双击放大缩小窗口老是出bug！！！
         self.showMaximizedOrNormal()
 
     def showMaximizedOrNormal(self):
@@ -56,6 +61,11 @@ class UI_TitleBar(QtWidgets.QWidget, Ui_TitleBar):
         if event.buttons() == Qt.LeftButton and self.mPos:
             self.windowMoved.emit(self.mapToGlobal(event.pos() - self.mPos))
         event.accept()
+
+    def setTransparency(self):
+        minPalette = self.minimum.palette()
+        minPalette.setColor(minPalette.Window, Qt.transparent)
+        self.minimum.setPalette(minPalette)
 
     # def __init__(self):
     #     super(TitleBar, self).__init__()

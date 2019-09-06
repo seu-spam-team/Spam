@@ -14,7 +14,7 @@ class ServerDaemon:
 
 	def __init__(self):
 		print('Server started.')
-		HOST = '10.203.138.52'
+		HOST = '10.203.86.34'
 		PORT = 8080
 		ADDR = (HOST,PORT)
 		Database.create()

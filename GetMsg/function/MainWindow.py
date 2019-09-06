@@ -13,12 +13,16 @@ import sys
 class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def __init__(self,mailusr,clisock):
         super(UI_MainWindow, self).__init__()
+        self.setAutoFillBackground(True)
         self.setupUi(self)
+        self.layout().setSpacing(0)
+        self.layout().setContentsMargins(0, 0, 0, 0)
         self.hideCheckMailWidget()
         self.connectButtons()
         self.mailusr = mailusr
         self.clisock = clisock
         self.UI()
+        self.usePalette()
 
     def sendMail(self):
         sendmail = UI_SendMail(self.mailusr)
@@ -31,6 +35,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.moveto.setText("移至垃圾箱")
         normallist = self.mailusr.get_normalmail()
         self.mailList.addItems(normallist)
+        # self.checkMail()
 
     def clickTrash(self): #查看垃圾箱
         self.mailList.clear()
@@ -192,6 +197,27 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         self.content.show()
         self.titlelabel.show()
         self.senderlabel.show()
+
+    def usePalette(self):
+        # pass
+        op = QtWidgets.QGraphicsOpacityEffect()
+        op.setOpacity(0.5)
+        self.mailList.setGraphicsEffect(op)
+        self.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.setAutoFillBackground(False)
+        # self.setAttribute(Qt.WA_NoSystemBackground)
+        # self.setWindowOpacity(0)
+        # self.checkmailwidget.setWindowOpacity(0)
+        self.leftwidget.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.checkmailwidget.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.leftwidget.setAutoFillBackground(False)
+        # leftpalette = self.leftwidget.palette()
+        # leftpalette.setColor(leftpalette.Window, QColor(85, 170, 255))
+        # self.leftwidget.setPalette(leftpalette)
+        self.checkmailwidget.setAutoFillBackground(False)
+        # palette = self.checkmailwidget.palette()
+        # palette.setColor(palette.Window, QColor(85, 170, 255))
+        # self.checkmailwidget.setPalette(palette)
 
 
 if __name__ == "__main__":
