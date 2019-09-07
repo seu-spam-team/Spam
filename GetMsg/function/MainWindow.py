@@ -219,6 +219,17 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         # palette.setColor(palette.Window, QColor(85, 170, 255))
         # self.checkmailwidget.setPalette(palette)
 
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton or Qt.MidButton or Qt.RightButton:
+            pass
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton or Qt.MidButton or Qt.RightButton:
+            pass
+
+    def mouseMoveEvent(self, event):
+        pass
+
 
 if __name__ == "__main__":
     import sys
