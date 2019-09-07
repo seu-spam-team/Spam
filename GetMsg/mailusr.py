@@ -37,7 +37,7 @@ class Mail:
     def get_test(self):
         return self.subject+' '+self.text
     def getmailinfo(self):
-        str = '发件人：' + self.send + '\n' + '主题：' +self.subject + '\n' + '正文：' + self.text
+        str = 'sender: ' + self.send + 'subject:' + self.subject + '\n' + 'text:' + self.text
         return str
 
 
@@ -234,7 +234,6 @@ class MailUser:
                 sys.exit()
             newnum = imap.NumMessages
             if(newnum>currentnumber):
-                imap.Disconnect()
                 self.server.quit()
                 self.server = poplib.POP3(self.pop3_server)
                 self.server.set_debuglevel(0)
@@ -273,18 +272,6 @@ class MailUser:
                     signal.run('正常')
                 else:
                     signal.run('垃圾')
-                if '@163.com' in self.user:
-                    success = imap.Connect("imap.163.com")
-                if '@qq.com' in self.user:
-                    success = imap.Connect("imap.qq.com")
-                if (success != True):
-                    print(imap.LastErrorText)
-                    sys.exit()
-                # Login
-                success = imap.Login(self.user, self.password)
-                if (success != True):
-                    print(imap.LastErrorText)
-                    sys.exit()
             currentnumber=newnum
 
 
@@ -327,7 +314,7 @@ class MailUser:
               send = mail.get_sender()
               sub = mail.get_sub()
               text = mail.get_text()
-              str = '发件人：' + send +'\n' +'主题：'+ sub + '\n' +'正文：'+text
+              str = 'sender: ' + send + 'subject:' + sub + '\n' + 'text:'+text
               list.append(str)
         return list
 
@@ -340,7 +327,7 @@ class MailUser:
               send = mail.get_sender()
               sub = mail.get_sub()
               text=mail.get_text()
-              str = '发件人：' + send + '\n' + '主题：' + sub + '\n' + '正文：' + text
+              str = 'sender: ' + send + 'subject:' + sub+'\n'+ 'text:'+text
               list.append(str)
         return list
 
@@ -372,10 +359,6 @@ class MailUser:
 
     def getkey(self,i):
         return self.maillist[i].getmail()
-
-
-    def rtmail(self,num):
-        return self.maillist[num-1]
 
 
 
