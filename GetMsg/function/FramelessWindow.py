@@ -3,7 +3,7 @@ import sys
 import qtawesome
 from PyQt5 import QtCore
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent, QIcon, QBrush, QPixmap
+from PyQt5.QtGui import QPainter, QPen, QColor, QEnterEvent, QIcon, QBrush, QPixmap, QPalette
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication, QDesktopWidget, QSystemTrayIcon, QAction, QMenu, QMessageBox
 
 from function.MainWindow import UI_MainWindow
@@ -100,6 +100,13 @@ class FramelessWindow(QWidget):
     def setBackgroundPicture(self):
         palette = self.palette()
         palette.setBrush(self.backgroundRole(), QBrush(QPixmap("background.jpg")))
+        self.setPalette(palette)
+
+    def resizeEvent(self, event):
+        palette = QPalette()
+        pix = QPixmap("background.jpg")
+        pix = pix.scaled(self.width(), self.height())
+        palette.setBrush(QPalette.Background, QBrush(pix))
         self.setPalette(palette)
 
     def setWidget(self, widget):
