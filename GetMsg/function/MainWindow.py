@@ -78,18 +78,12 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         t = self.mailList.item(num).text()
         print((t))
         self.mailusr.mailnum(t)
-        sender = (re.findall(r"发件人：(.+?)\n主题", t,re.S))
+        sender = (re.findall(r"sender: (.+?)sub", t))
         sender = (sender[0])
-        sub = (re.findall(r"主题：(.+?)\n正文", t, re.S))
-        if len(sub)==0:
-            sub=''
-        else:
-            sub = (sub[0])
-        text = re.findall(r"正文：(.+.)", t)
-        if len(text)==0:
-          text=''
-        else:
-          text = (text[0])
+        sub = (re.findall(r"subject:(.+?)\ntext", t, re.S))
+        sub = (sub[0])
+        text = re.findall(r"text:(.+.)", t)
+        text = (text[0])
         self.displayMail(sender, sub, text)
         self.showCheckMailWidget()
         # checkwindow = UI_CheckMail(sender, sub, text)

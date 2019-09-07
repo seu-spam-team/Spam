@@ -3,19 +3,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-class myLabel(QLabel):
-    clicked = pyqtSignal()
-    def mouseReleaseEvent(self, QMouseEvent):
-        if QMouseEvent.button() == Qt.LeftButton:
-            self.clicked.emit()
 class Ui_MainWindow(object):
-    def setupUi(self,MainWindow,strl,mailusr,Framelessmainwindow):
+    def setupUi(self, MainWindow, strl):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(300, 300)
         MainWindow.setWindowOpacity(0.8)
 
 
-        message = myLabel(MainWindow)
+        message = QLabel(MainWindow)
         message.setGeometry(QtCore.QRect(55, 85, 200, 100))
 
         pa = QPalette()
@@ -49,19 +44,5 @@ class Ui_MainWindow(object):
 
         self.setMinimumSize(300,300) # 设置窗口最小尺寸
         self.setMaximumSize(300,300) # 设置窗口最大尺寸
-        message.clicked.connect(self.showemail)
-
-        self.mailusr=mailusr
-        self.Framelessmainwindow=Framelessmainwindow
-    def showemail(self):
-        num=self.mailusr.getmailnum()
-        mail=self.mailusr.rtmail(num)
-        send=mail.get_sender()
-        sub=mail.get_sub()
-        text=mail.get_text()
-        self.Framelessmainwindow.show()
-        self.Framelessmainwindow.mainwindow.displayMail(send, sub, text)
-        self.Framelessmainwindow.mainwindow.showCheckMailWidget()
-
 
 

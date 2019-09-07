@@ -10,11 +10,11 @@ import random
 
 
 class MainCode(QMainWindow,sliding_window.Ui_MainWindow):
-    def __init__(self,str,mailusr,mainwindow):
+    def __init__(self,str):
         QMainWindow.__init__(self)
         sliding_window.Ui_MainWindow.__init__(self)
-        self.setupUi(self,str,mailusr,mainwindow)
-        self.setWindowFlags(Qt.FramelessWindowHint|Qt.Tool|Qt.WindowStaysOnTopHint)
+        self.setupUi(self,strl=str)
+        self.setWindowFlags(Qt.FramelessWindowHint|Qt.Tool)
         #self.setAttribute(Qt.WA_TranslucentBackground)
         #|Qt.Tool
 
