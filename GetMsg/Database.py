@@ -156,6 +156,12 @@ def delete_white(usr_name,list_name):
     conn.close()
 
 
+def if_senderIn(sender,list):
+    for l in list:
+        if l in sender:
+            return True
+    return False
+
 
 if __name__ == "__main__":
     list=[None]

@@ -33,6 +33,7 @@ class FramelessWindow(QWidget):
         self.titlebar.windowNormaled.connect(self.windowRestore)
         self.titlebar.windowMaximumed.connect(self.windowMaximum)
         self.systemTrayIconInitial()
+        self.mainwindow.checkmailwidget.setMinimumSize(0, 0)
 
     def systemTrayIconInitial(self):
         # 在系统托盘处显示图标
@@ -72,7 +73,10 @@ class FramelessWindow(QWidget):
     def act(self, reason):
         # 鼠标点击icon传递的信号会带有一个整形的值，1是表示单击右键，2是双击，3是单击左键，4是用鼠标中键点击
         if reason == 2 or reason == 3:
-            self.show()
+            if self.isVisible():
+                self.hide()
+            else:
+                self.show()
 
     def connectButtons(self):
         self.titlebar.closewidget.clicked.connect(self.hide)
@@ -276,6 +280,9 @@ class FramelessWindow(QWidget):
             else:
                 return
         self.setGeometry(x, y, w, h)
+
+    def getmainwindow(self):
+        return self.mainwindow
 
 if __name__ == '__main__':
 
