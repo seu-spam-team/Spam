@@ -5,6 +5,7 @@ from email.header import decode_header
 from email.utils import parseaddr
 import re
 import sys
+from collections import  Counter
 import chilkat2
 class Mail:
     def __init__(self,sen,sub,tex):
@@ -82,6 +83,7 @@ class MailUser:
         self.user=usr
         self.password=pwd
         self.maillist=[]
+        self.userlist=[]
 
 
     def login(self,usr,pwd):
@@ -246,6 +248,50 @@ class MailUser:
                 print(imap.LastErrorText)
                 sys.exit()
             newnum = imap.NumMessages
+            if(newnum-currentnumber>20):
+              while(newnum>currentnumber):
+                imap.Disconnect()
+                self.server.quit()
+                self.server = poplib.POP3(self.pop3_server)
+                self.server.set_debuglevel(0)
+                self.server.user(self.user)
+                self.server.pass_(self.password)
+                index = currentnumber + 1
+                resp, lines, octets = self.server.retr(index)
+                # lines存储了邮件的原始文本的每一行,
+                # 可以获得整个邮件的原始文本:
+                msg_content = b'\r\n'.join(lines).decode('utf-8')
+                # 稍后解析出邮件:
+                msg = Parser().parsestr(msg_content)
+                # 可以根据邮件索引号直接从服务器删除邮件:
+                # server.dele(index)
+                mail = self.parsemsg(msg)
+                send = mail.get_sender()
+                sock.sendfrom(self.user, send)
+                rs = sock.get_sender()
+                print(rs)
+                if rs == '1':
+                    print(1)
+                    mail.set_normal(False)
+                    self.maillist.append(mail)
+                elif rs == '2':
+                    print(2)
+                    mail.set_normal(True)
+                    self.maillist.append(mail)
+                elif rs == '3':
+                    print(3)
+                    self.userlist.append(send)
+                    test = mail.get_test()
+                    sock.sendmail(test)
+                    label = sock.getresult()
+                    mail.set_normal(label)
+                    self.maillist.append(mail)
+              currentnumber=currentnumber+1
+              if(len(self.userlist)>20):
+                  counterlist=Counter(self.userlist)
+                  for usr in counterlist:
+                      if counterlist[usr]>10:
+                          sock.sendback(usr)
             while (newnum>currentnumber):
                 imap.Disconnect()
                 self.server.quit()
@@ -282,6 +328,7 @@ class MailUser:
                     label = sock.getresult()
                     mail.set_normal(label)
                     self.maillist.append(mail)
+
                 if mail.get_label()==True:
                     signal.run('正常')
                 else:
