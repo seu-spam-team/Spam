@@ -246,14 +246,14 @@ class MailUser:
                 print(imap.LastErrorText)
                 sys.exit()
             newnum = imap.NumMessages
-            if(newnum>currentnumber):
+            while (newnum>currentnumber):
                 imap.Disconnect()
                 self.server.quit()
                 self.server = poplib.POP3(self.pop3_server)
                 self.server.set_debuglevel(0)
                 self.server.user(self.user)
                 self.server.pass_(self.password)
-                index = newnum
+                index = currentnumber+1
                 resp, lines, octets = self.server.retr(index)
                 # lines存储了邮件的原始文本的每一行,
                 # 可以获得整个邮件的原始文本:
@@ -298,6 +298,7 @@ class MailUser:
                 if (success != True):
                     print(imap.LastErrorText)
                     sys.exit()
+                currentnumber=currentnumber+1
             currentnumber=newnum
 
 
@@ -336,16 +337,6 @@ class MailUser:
         list = []
         for mail in self.maillist:
             if not mail.get_label():
-                # send = mail.get_sender()
-                # sub = mail.get_sub()
-                # text = mail.get_text()
-                # t = re.findall(r"正文：(.+?)\n", text, re.S)
-                # if t == []:
-                #     print(12312)
-                #     pass
-                # else:
-                #     text = t[0].replace('\n', '')
-                # str = '发件人：' + send + '主题：' + sub + '\n' + '正文：' + text
                 str=mail.getmailinfo()
                 list.append(str)
         return list
