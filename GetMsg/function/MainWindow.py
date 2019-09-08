@@ -134,10 +134,11 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         act=self.moveto.text()
         n=self.locateEachMail()
         text = self.mailList.item(n).text()
-        mailnum=self.mailusr.mailnum(text)
         if act=='移至垃圾箱':
+            mailnum = self.mailusr.num_moveto(text,True)
             self.mailusr.setlabel(mailnum,False)
         if act=='移至收件箱':
+            mailnum = self.mailusr.num_moveto(text, False)
             self.mailusr.setlabel(mailnum, True)
         self.mailList.removeItemWidget(self.mailList.takeItem(n))
 

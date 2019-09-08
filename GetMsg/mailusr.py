@@ -394,6 +394,20 @@ class MailUser:
     def rtmail(self,num):
         return self.maillist[num]
 
+    def num_moveto(self,str,label):
+        l = len(self.maillist)
+        num = None
+        for i in range(0, l):
+            mailinfo = self.maillist[i].getmailinfo()
+            l=self.maillist[i].get_label()
+            if str == mailinfo and l==label:
+                num = i
+                break
+        # print(num)
+        return num
+
+
+
 
 
     def maildic(self):
