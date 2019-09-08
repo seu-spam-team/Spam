@@ -102,10 +102,11 @@ def black_list(usr):
 
     list1=set(list0)
     list2=list(list1)
-    print(list2)
+
    # print("Operation done successfully")
     conn.close()
     if list2==[None] or len(list2)==0:
+        list2=[]
         return list2
     list3 = list2[0].split(',')
     list3 = list(set(list3))
@@ -125,11 +126,13 @@ def white_list(usr):
             list0.append(row[1])
     list1 = set(list0)
     list2=list(list1)
-    print(list2)
+
     #print("Operation done successfully")
     conn.close()
     if list2==[None]or len(list2)==0:
+        list2=[]
         return list2
+
     list3=list2[0].split(',')
     list3=list(set(list3))
     return list3
@@ -155,6 +158,14 @@ def delete_white(usr_name,list_name):
     print("Total number of rows deleted :", conn.total_changes)
     conn.close()
 
+
+def if_senderIn(sender,list):
+    if list==[]:
+        return False
+    for l in list:
+        if l in sender:
+            return True
+    return False
 
 
 if __name__ == "__main__":
