@@ -20,7 +20,6 @@ import os.path
 # 获取Windows平台临时文件夹
 path = os.getenv('temp')
 filename = os.path.join(path, 'info.txt')
-
 window=tk.Tk()
 window.title('欢迎使用九龙湖邮管队')
 window.geometry('420x550+500+100')
@@ -74,8 +73,8 @@ def usr_log_in():
     elif sta == 'login success':
 
             tk.messagebox.showinfo(title="欢迎",message="登录成功")
-            if usr_command==1:
-             with open(filename, 'w') as fp:
+            if usr_command()==1:
+              with open(filename, 'w') as fp:
                fp.write(','.join((usr_name,usr_pwd)))
             window.destroy()
 
@@ -135,7 +134,7 @@ def usr_command():
     if(var.get()==1):
         return 1
     else:
-        return 0    
+        return 2
 
 #登录 按钮
 bt_login=tk.Button(window,text='Login',width='16',height='1',font=('Ink Free', 17),anchor='center',cursor='hand2',command=usr_log_in,bg='LightCyan')
@@ -150,10 +149,3 @@ window.mainloop()
 
 
 #imunylwkvtkhgjgc
-
-
-
-
-
-
-
