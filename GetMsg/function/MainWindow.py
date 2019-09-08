@@ -1,5 +1,5 @@
 import qtawesome
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, sip
 from PyQt5.QtCore import QCoreApplication, QEventLoop, QSize
 
 from function.BlackWhiteList import UI_BlackWhiteList
@@ -11,6 +11,9 @@ import mailwrite
 from PyQt5.Qt import *
 import sys
 class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
+
+    signOut = pyqtSignal()
+
     def __init__(self,mailusr,clisock):
         super(UI_MainWindow, self).__init__()
         self.setAutoFillBackground(True)
@@ -27,6 +30,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
     def sendMail(self):
         sendmail = UI_SendMail(self.mailusr)
         sendmail.show()
+        self.deleteWidget()
         qe = QEventLoop()
         qe.exec()
 
@@ -60,7 +64,7 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         usr = self.username.text()
         dict=self.mailusr.maildic()
         mailwrite.write(usr,dict)
-        QCoreApplication.instance().quit()
+        self.signOut.emit()
 
 
     def locateEachMail(self):
@@ -74,16 +78,17 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
         selectedItems = self.mailList.selectedItems()
         if len(selectedItems) == 0:
             return
+        # op = QtWidgets.QGraphicsOpacityEffect()
+        # op.setOpacity(0.5)
+        # self.content.setGraphicsEffect(op)
         num = self.locateEachMail()
         t = self.mailList.item(num).text()
-        print((t))
-        self.mailusr.mailnum(t)
-        sender = (re.findall(r"sender: (.+?)sub", t))
-        sender = (sender[0])
-        sub = (re.findall(r"subject:(.+?)\ntext", t, re.S))
-        sub = (sub[0])
-        text = re.findall(r"text:(.+.)", t)
-        text = (text[0])
+        #print(t)
+        num=self.mailusr.mailnum(t)
+        mail=self.mailusr.rtmail(num)
+        sender=mail.get_sender()
+        sub=mail.get_sub()
+        text=mail.get_text()
         self.displayMail(sender, sub, text)
         self.showCheckMailWidget()
         # checkwindow = UI_CheckMail(sender, sub, text)
@@ -229,6 +234,10 @@ class UI_MainWindow(QtWidgets.QWidget, mainwindow.Ui_MainWindow):
 
     def mouseMoveEvent(self, event):
         pass
+
+    def deleteWidget(self):
+        pass
+        # self.checkmailwidget.remove(self.content)
 
 
 if __name__ == "__main__":

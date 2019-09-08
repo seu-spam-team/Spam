@@ -3,6 +3,7 @@ import time
 from email.parser import Parser
 from email.header import decode_header
 from email.utils import parseaddr
+import re
 import sys
 import chilkat2
 class Mail:
@@ -13,6 +14,8 @@ class Mail:
         self.text=tex
         self.ifnormal=None
         self.pre_list=[]
+        self.mailinfo=None
+        self.set_maininfo()
 
     def getmail(self):
         text=self.text[0:10]
@@ -32,13 +35,23 @@ class Mail:
         self.ifnormal=label
     def set_pretest(self,pre):
         self.pre_list=pre
+    def set_maininfo(self):
+        send = self.send
+        sub = self.subject
+        text = self.text
+        t = re.findall(r"(.+?)\n", text, re.S)
+        if t == []:
+            pass
+        else:
+            text = t[0].replace('\n', '')
+        str = '发件人：' + send+'\n'+ '主题：' + sub + '\n' + '正文：' + text
+        self.mailinfo=str
     def get_pretest(self):
         return self.pre_list
     def get_test(self):
         return self.subject+' '+self.text
     def getmailinfo(self):
-        str = 'sender: ' + self.send + 'subject:' + self.subject + '\n' + 'text:' + self.text
-        return str
+        return self.mailinfo
 
 
 def decode_str(s):
@@ -234,6 +247,7 @@ class MailUser:
                 sys.exit()
             newnum = imap.NumMessages
             if(newnum>currentnumber):
+                imap.Disconnect()
                 self.server.quit()
                 self.server = poplib.POP3(self.pop3_server)
                 self.server.set_debuglevel(0)
@@ -272,6 +286,18 @@ class MailUser:
                     signal.run('正常')
                 else:
                     signal.run('垃圾')
+                if '@163.com' in self.user:
+                    success = imap.Connect("imap.163.com")
+                if '@qq.com' in self.user:
+                    success = imap.Connect("imap.qq.com")
+                if (success != True):
+                    print(imap.LastErrorText)
+                    sys.exit()
+                # Login
+                success = imap.Login(self.user, self.password)
+                if (success != True):
+                    print(imap.LastErrorText)
+                    sys.exit()
             currentnumber=newnum
 
 
@@ -306,30 +332,34 @@ class MailUser:
             list.append(str)
         return list
 
-
     def get_badmail(self):
         list = []
         for mail in self.maillist:
             if not mail.get_label():
-              send = mail.get_sender()
-              sub = mail.get_sub()
-              text = mail.get_text()
-              str = 'sender: ' + send + 'subject:' + sub + '\n' + 'text:'+text
-              list.append(str)
+                # send = mail.get_sender()
+                # sub = mail.get_sub()
+                # text = mail.get_text()
+                # t = re.findall(r"正文：(.+?)\n", text, re.S)
+                # if t == []:
+                #     print(12312)
+                #     pass
+                # else:
+                #     text = t[0].replace('\n', '')
+                # str = '发件人：' + send + '主题：' + sub + '\n' + '正文：' + text
+                str=mail.getmailinfo()
+                list.append(str)
         return list
-
-
 
     def get_normalmail(self):
         list = []
         for mail in self.maillist:
             if mail.get_label():
-              send = mail.get_sender()
-              sub = mail.get_sub()
-              text=mail.get_text()
-              str = 'sender: ' + send + 'subject:' + sub+'\n'+ 'text:'+text
-              list.append(str)
+                str=mail.getmailinfo()
+                list.append(str)
         return list
+
+
+
 
 
     def setlabel(self,num,label):
@@ -353,12 +383,16 @@ class MailUser:
             if str==mailinfo:
                 num=i
                 break
-        print(num)
+        #print(num)
         return num
 
 
     def getkey(self,i):
         return self.maillist[i].getmail()
+
+
+    def rtmail(self,num):
+        return self.maillist[num]
 
 
 
