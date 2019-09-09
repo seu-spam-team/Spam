@@ -78,6 +78,8 @@ class MailUser:
            self.pop3_server = 'pop.163.com'
         elif '@qq.com' in usr:
             self.pop3_server = 'pop.qq.com'
+        elif '@126.com' in usr:
+            self.pop3_server = 'pop.126.com'
         # 连接到POP3服务器:
         self.server = None
         self.user=usr
@@ -147,6 +149,8 @@ class MailUser:
                 content = msg.get_payload(decode=True)
                 charset = guess_charset(msg)
                 if charset:
+                    if 'utf-8' in charset:
+                        charset='utf-8'
                     content = content.decode(charset)
             return content
 
@@ -463,18 +467,11 @@ class MailUser:
 
 
 if __name__ == "__main__":
-    mailusr=MailUser('haonan_0204@163.com','123456789asd')
-    str=mailusr.login('haonan_0204@163.com','123456789asd')
+    mailusr=MailUser('jkldas19@126.com','zquad123')
+    str=mailusr.login('jkldas19@126.com','zquad123')
     print(str)
 
     mailusr.getmails()
-    #mailusr.mail_info()
-    #mailusr.checknew()
-
-    num=mailusr.getmailnum()
-    text=mailusr.mailtext(5)
-    print(num)
-    print(text)
 
     mailusr.quit()
 
