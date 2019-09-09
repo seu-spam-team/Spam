@@ -45,8 +45,8 @@ class Mail:
             pass
         else:
             text = t[0].replace('\n', '')
-        str = '发件人：' + send+'\n'+ '主题：' + sub + '\n' + '正文：' + text
-        self.mailinfo=str
+        s = '发件人：' + send+'\n'+ '主题：' + sub + '\n' + '正文：' + text
+        self.mailinfo=s
     def get_pretest(self):
         return self.pre_list
     def get_test(self):
@@ -55,7 +55,7 @@ class Mail:
         return self.mailinfo
 
 
-def decode_str(s):
+def decode_s(s):
     value, charset = decode_header(s)[0]
     if charset:
         value = value.decode(charset)
@@ -151,7 +151,10 @@ class MailUser:
                 if charset:
                     if 'utf-8' in charset:
                         charset='utf-8'
-                    content = content.decode(charset)
+                    try:
+                      content = content.decode(charset)
+                    except:
+                      content='无法解析'
             return content
 
     def get_html(self, msg):
@@ -171,22 +174,22 @@ class MailUser:
                 value = msg.get(header, '')
                 if value:
                     if header == 'Subject':
-                        value = decode_str(value)
-                        sub = value
+                        value = decode_s(value)
+                        sub = str(value)
                     elif header == 'From':
                         hdr, addr = parseaddr(value)
-                        name = decode_str(hdr)
+                        name = decode_s(hdr)
                         value = name+'<'+addr+'>'
                         sender = value
                     elif header=='To':
                         hdr, addr = parseaddr(value)
-                        name = decode_str(hdr)
+                        name = decode_s(hdr)
                         value = u'%s <%s>' % (name, addr)
                     elif header == 'X-Originating-IP':
-                        value = decode_str(value)
+                        value = decode_s(value)
                         ip = value
                     else:
-                        value = decode_str(value)
+                        value = decode_s(value)
                 else:
                     value=''
                 pre.append(value)
@@ -197,6 +200,7 @@ class MailUser:
             for part in msg.walk():
                 if not part.is_multipart():
                     text = self.get_content(part)
+                    text=str(text)
                     #print("emailcontent:" + text)
                     break
             # for part in msg.walk():
@@ -206,7 +210,7 @@ class MailUser:
             #         if html !='':
             #           break
             mail = Mail(sender, sub, text)
-            #mail.out()
+            print(mail.getmailinfo())
             return mail
 
 
@@ -266,7 +270,7 @@ class MailUser:
                 # 可以获得整个邮件的原始文本:
                 msg_content = b'\r\n'.join(lines).decode('utf-8')
                 # 稍后解析出邮件:
-                msg = Parser().parsestr(msg_content)
+                msg = Parser().parses(msg_content)
                 # 可以根据邮件索引号直接从服务器删除邮件:
                 # server.dele(index)
                 mail = self.parsemsg(msg)
@@ -310,7 +314,7 @@ class MailUser:
                 # 可以获得整个邮件的原始文本:
                 msg_content = b'\r\n'.join(lines).decode('utf-8')
                 # 稍后解析出邮件:
-                msg = Parser().parsestr(msg_content)
+                msg = Parser().parses(msg_content)
                 # 可以根据邮件索引号直接从服务器删除邮件:
                 # server.dele(index)
                 mail = self.parsemsg(msg)
@@ -362,14 +366,14 @@ class MailUser:
     #得到第几封邮件的内容
     def mailtext(self,num):
         t=num
-        str=self.maillist[t].get_sub()+"    "+self.maillist[t].get_text()
-        return str
+        s=self.maillist[t].get_sub()+"    "+self.maillist[t].get_text()
+        return s
 
 
     def mailsender(self,num):
         t = num
-        str = self.maillist[t].get_sender()
-        return str
+        s = self.maillist[t].get_sender()
+        return s
 
 
     def mail_pretest(self,num):
@@ -381,24 +385,24 @@ class MailUser:
         for mail in self.maillist:
             send=mail.get_sender()
             sub=mail.get_sub()
-            str='sender: '+send+'subject: '+sub
-            list.append(str)
+            s='sender: '+send+'subject: '+sub
+            list.append(s)
         return list
 
     def get_badmail(self):
         list = []
         for mail in self.maillist:
             if not mail.get_label():
-                str=mail.getmailinfo()
-                list.append(str)
+                s=mail.getmailinfo()
+                list.append(s)
         return list
 
     def get_normalmail(self):
         list = []
         for mail in self.maillist:
             if mail.get_label():
-                str=mail.getmailinfo()
-                list.append(str)
+                s=mail.getmailinfo()
+                list.append(s)
         return list
 
 
@@ -418,12 +422,12 @@ class MailUser:
     def quit(self):
         self.server.quit()
 
-    def mailnum(self,str):
+    def mailnum(self,s):
         l=len(self.maillist)
         num=None
         for i in range(0,l):
             mailinfo=self.maillist[i].getmailinfo()
-            if str==mailinfo:
+            if s==mailinfo:
                 num=i
                 break
         #print(num)
@@ -437,13 +441,13 @@ class MailUser:
     def rtmail(self,num):
         return self.maillist[num]
 
-    def num_moveto(self,str,label):
+    def num_moveto(self,s,label):
         l = len(self.maillist)
         num = None
         for i in range(0, l):
             mailinfo = self.maillist[i].getmailinfo()
             l=self.maillist[i].get_label()
-            if str == mailinfo and l==label:
+            if s == mailinfo and l==label:
                 num = i
                 break
         # print(num)
@@ -467,9 +471,9 @@ class MailUser:
 
 
 if __name__ == "__main__":
-    mailusr=MailUser('jkldas19@126.com','zquad123')
-    str=mailusr.login('jkldas19@126.com','zquad123')
-    print(str)
+    mailusr=MailUser('1063650139@qq.com','vqkrvgpdmtfjbbcf')
+    s=mailusr.login('1063650139@qq.com','vqkrvgpdmtfjbbcf')
+    print(s)
 
     mailusr.getmails()
 
