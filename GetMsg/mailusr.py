@@ -16,7 +16,7 @@ class Mail:
         self.ifnormal=None
         self.pre_list=[]
         self.mailinfo=None
-        self.set_maininfo()
+        self.set_mailinfo()
 
     def getmail(self):
         text=self.text[0:10]
@@ -36,7 +36,7 @@ class Mail:
         self.ifnormal=label
     def set_pretest(self,pre):
         self.pre_list=pre
-    def set_maininfo(self):
+    def set_mailinfo(self):
         send = self.send
         sub = self.subject
         text = self.text
@@ -292,6 +292,7 @@ class MailUser:
                   for usr in counterlist:
                       if counterlist[usr]>10:
                           sock.sendback(usr)
+                  self.userlist.clear()
             while (newnum>currentnumber):
                 imap.Disconnect()
                 self.server.quit()
